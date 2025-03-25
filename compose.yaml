@@ -1,0 +1,10 @@
+services:
+  1xd3-team-project:
+    build: .
+    networks:
+        - internal
+    ports:
+      - "3000:80"
+networks:
+  internal:
+    driver: bridge
