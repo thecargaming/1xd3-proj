@@ -4,7 +4,7 @@
   "scripts": {
     "docker": "docker compose build && docker compose down && docker compose up",
     "dev": "(cd client && npm run dev)",
-    "build": "(cd client && npm run build)",
+    "build": "(cd client && npm run build) && mkdir -p dist/api && cp -r client/dist/* dist && cp -r server/* dist/api",
     "lint": "(cd client && npm run lint)",
     "preview": "(cd client && npm run preview)"
   }
