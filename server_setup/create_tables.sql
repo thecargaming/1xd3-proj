@@ -2,10 +2,10 @@ USE chenp102_db;
 
 CREATE TABLE users (
     id INT NOT NULL AUTO_INCREMENT,
-    email CHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
     phone CHAR(10),
-    first_name CHAR(255) NOT NULL,
-    last_name CHAR(255) NOT NULL,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
     password_hash CHAR(72) NOT NULL,
     PRIMARY KEY(id)
 );
@@ -18,20 +18,21 @@ CREATE TABLE sessions (
 );
 
 CREATE TABLE companies (
-    name CHAR(255) NOT NULL,
-    address CHAR(255) NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL,
     phone CHAR(10) NOT NULL,
-    PRIMARY KEY(name)
+    PRIMARY KEY(id)
 );
 
 CREATE TABLE representatives (
     id INT NOT NULL AUTO_INCREMENT,
-    company CHAR(255) NOT NULL,
+    company INT NOT NULL,
     user_id INT NOT NULL,
-    email CHAR(255),
+    email VARCHAR(255),
     phone CHAR(10),
     PRIMARY KEY(id),
-    FOREIGN KEY(company) REFERENCES companies(name),
+    FOREIGN KEY(company) REFERENCES companies(id),
     FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
