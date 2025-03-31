@@ -1,10 +1,10 @@
-import { Link } from "react-router";
+import Link from "next/link";
 
 export default function Index() {
     return (
         <div>
             <p>Hello, world!</p>
-            <Link to="login">Login</Link>
+            <Link href="/login">Login</Link>
         </div>
     )
 }
