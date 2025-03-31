@@ -7,11 +7,15 @@
 ```
 
 # Deploy
+After building the server, copy it to the htdocs directory.
 ```bash
-    npm run build
-    mkdir -p "$HTDOC_DIR/~chenp102/team"
-    cp dist/* "$HTDOC_DIR/~chenp102/team"
+    mkdir -p "$HTDOCS_DIR/~chenp102/team"
+    cp dist/* "$HTDOCS_DIR/~chenp102/team"
 ```
+The database credentials are stored in environment variables. An example of
+setting env can be found at `server_setup/.htaccess`. Replace the env with the
+credentials of your server and copy it to `$HTDOCS_DIR`. A script to initialize
+the database can be found at `server_setup/create_tables.sql`.
 
 # Development
 ## Running the client
@@ -20,7 +24,9 @@
 ```
 
 ## Running the server
-To run the development server, docker and docker compose must be installed
+To run the development server, docker and docker compose must be installed.
+Building, initializing the database, and building are all done automatically by
+the build script.
 ```bash
     npm run docker
 ```
