@@ -1,5 +1,5 @@
 <?php
-function connect_db() {
+function connect_db(): PDO {
     $username = getenv("DATABASE_USERNAME");
     $password = getenv("DATABASE_PASSWORD");
     $dbname = getenv("DATABASE_NAME");
