@@ -1,6 +1,7 @@
 <?php
 include "../lib/db.php";
 include "../lib/send.php";
+include "../lib/auth.php";
 
 $first_name = filter_input(INPUT_POST, "first_name", FILTER_SANITIZE_SPECIAL_CHARS) or send(400, ["msg"=>"no first name"]);
 $last_name = filter_input(INPUT_POST, "last_name", FILTER_SANITIZE_SPECIAL_CHARS) or send(400, ["msg"=>"no last name"]);
@@ -15,13 +16,16 @@ try {
     $db = connect_db();
 
     $q = $db->prepare("INSERT INTO users (email, first_name, last_name, password_hash) VALUES (?, ?, ?, ?)");
-    $res = $q->execute([$email, $first_name, $last_name, $hash]);
+    if (!$q->execute([$email, $first_name, $last_name, $hash])) send(500, [ "msg" => "unknown" ]);
+    $q->closeCursor();
 
-    if (!$res) {
-        send(500, [
-            "msg" => "unknown"
-        ]);
-    }
+    $q = $db->prepare("SELECT id FROM users WHERE email = ?");
+    if (!$q->execute([$email])) send(500, [ "msg" => "unknown" ]);
+    $row = $q->fetch();
+    if (is_null($row)) send(500, [ "msg" => "unknown" ]);
+
+    create_session($db, $row["id"]);
+
     send(200, [
         "msg" => "success"
     ]);
