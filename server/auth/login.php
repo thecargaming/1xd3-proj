@@ -2,8 +2,8 @@
 include "../lib/db.php";
 include "../lib/send.php";
 
-$email = filter_input(INPUT_POST, "email") or die("invalid email");
-$password = filter_input(INPUT_POST, "password") or die("no password");
+$email = filter_input(INPUT_POST, "email") or send(400, ["msg" => "no email"]);
+$password = filter_input(INPUT_POST, "password") or send(400, ["msg" => "no password"]);
 
 $db = connect_db();
 $query = $db->prepare("SELECT password_hash FROM users WHERE email = ?");

@@ -2,10 +2,10 @@
 include "../lib/db.php";
 include "../lib/send.php";
 
-$first_name = filter_input(INPUT_POST, "first_name", FILTER_SANITIZE_SPECIAL_CHARS) or die("no first name");
-$last_name = filter_input(INPUT_POST, "last_name", FILTER_SANITIZE_SPECIAL_CHARS) or die("no last name");
+$first_name = filter_input(INPUT_POST, "first_name", FILTER_SANITIZE_SPECIAL_CHARS) or send(400, ["msg"=>"no first name"]);
+$last_name = filter_input(INPUT_POST, "last_name", FILTER_SANITIZE_SPECIAL_CHARS) or send(400, ["msg"=>"no last name"]);
 $password = filter_input(INPUT_POST, "password") or die("no password");
-$email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL) or die("invalid email");
+$email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL) or send(400, ["msg"=>"invalid email"]);
 
 $hash = password_hash($password, PASSWORD_BCRYPT, [
     "cost" => 12
