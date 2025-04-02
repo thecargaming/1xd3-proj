@@ -8,12 +8,14 @@ $last_name = filter_input(INPUT_POST, "last_name", FILTER_SANITIZE_SPECIAL_CHARS
 $password = filter_input(INPUT_POST, "password") or die("no password");
 $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL) or send(400, ["msg"=>"invalid email"]);
 
-$hash = password_hash($password, PASSWORD_BCRYPT, [
-    "cost" => 12
-]);
-
 try {
     $db = connect_db();
+    $userid = get_user_id($db);
+    if (!is_null($userid)) send(400, ["msg"=>"already logged in"]);
+
+    $hash = password_hash($password, PASSWORD_BCRYPT, [
+        "cost" => 12
+    ]);
 
     $q = $db->prepare("INSERT INTO users (email, first_name, last_name, password_hash) VALUES (?, ?, ?, ?)");
     if (!$q->execute([$email, $first_name, $last_name, $hash])) send(500, [ "msg" => "unknown" ]);
@@ -37,7 +39,7 @@ try {
         ]);
     }
     send(500, [
-        "msg" => "unknown"
+        "msg" => "unknown "
     ]);
 }
 ?>
