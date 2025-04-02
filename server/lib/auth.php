@@ -1,4 +1,10 @@
 <?php
+// Name:    Patrick Chen
+// Date:    2025-04-01
+//
+// Purpose:
+//      Authentication utilities
+
 $SESSION_ID_NAME = "session_id";
 $SESSION_EXPIRY_TIME = 3 * 24*60*60; // three days
 

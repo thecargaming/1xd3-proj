@@ -1,4 +1,16 @@
 <?php
+// Name:    Patrick Chen
+// Date:    2025-03-27
+//
+// Purpose:
+//      Registering a new user
+// Method: POST
+// Parameters
+//      string first_name
+//      string last_name
+//      string email
+//      string password
+
 include "../lib/db.php";
 include "../lib/send.php";
 include "../lib/auth.php";

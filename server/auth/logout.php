@@ -1,4 +1,13 @@
 <?php
+// Name:    Patrick Chen
+// Date:    2025-04-01
+//
+// Purpose:
+//      Logging into a user account
+// Method: Any
+// Parameters
+//      None
+
 include "../lib/db.php";
 include "../lib/send.php";
 include "../lib/auth.php";
