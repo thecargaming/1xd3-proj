@@ -22,6 +22,31 @@ function get_user_id(PDO $db): ?string {
     return $row["user_id"];
 }
 
+/**
+    Safety:
+        `$requested_info` should be sanitized sql
+        It is recommended that `$requested_info` should be a static string.
+ */
+function get_user_info_unchecked(PDO $db, string $requested_info): ?array {
+    global $SESSION_ID_NAME;
+    $session = filter_input(INPUT_COOKIE, $SESSION_ID_NAME);
+    if (is_null($session)) return null;
+
+    $query = $db->prepare("SELECT $requested_info FROM users INNER JOIN sessions ON users.id = sessions.user_id WHERE sessions.session_id=?;");
+    if (!$query->execute([$session])) {
+        setcookie($SESSION_ID_NAME, '', -1, '/');
+        return null;
+    }
+    $row = $query->fetch();
+    if (is_null($row) || $row === false) {
+        setcookie($SESSION_ID_NAME, '', -1, '/');
+        return null;
+    }
+
+    $query->closeCursor();
+    return $row;
+}
+
 function create_session(PDO $db, $user_id): bool {
     global $SESSION_ID_NAME, $SESSION_EXPIRY_TIME;
     $uuid = bin2hex(random_bytes(18));
