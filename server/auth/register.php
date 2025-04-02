@@ -28,13 +28,13 @@ try {
 
     create_session($db, $row["id"]);
 
-    send(200, [
+    send(201, [
         "msg" => "success"
     ]);
 
 } catch(PDOException $e) {
     if ($e->getCode() === '23000') { // integrity constraint violation code
-        send(401, [
+        send(409, [
             "msg" => "account already exists"
         ]);
     }
