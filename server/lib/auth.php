@@ -2,6 +2,9 @@
 $SESSION_ID_NAME = "session_id";
 $SESSION_EXPIRY_TIME = 3 * 24*60*60; // three days
 
+/**
+    Gets the user id from the session token
+ */
 function get_user_id(PDO $db): ?string {
     global $SESSION_ID_NAME;
     $session = filter_input(INPUT_COOKIE, $SESSION_ID_NAME);
@@ -23,6 +26,8 @@ function get_user_id(PDO $db): ?string {
 }
 
 /**
+    Gets the user id from the session token
+
     Safety:
         `$requested_info` should be sanitized sql
         It is recommended that `$requested_info` should be a static string.
@@ -47,6 +52,9 @@ function get_user_info_unchecked(PDO $db, string $requested_info): ?array {
     return $row;
 }
 
+/**
+    Creates a session token and adds it to the database and cookies
+ */
 function create_session(PDO $db, $user_id): bool {
     global $SESSION_ID_NAME, $SESSION_EXPIRY_TIME;
     $uuid = bin2hex(random_bytes(18));
@@ -59,6 +67,9 @@ function create_session(PDO $db, $user_id): bool {
     return $success;
 }
 
+/**
+    Destroys the current session that is in cookies
+ */
 function destroy_session(PDO $db): bool {
     global $SESSION_ID_NAME;
     $session = filter_input(INPUT_COOKIE, $SESSION_ID_NAME);
@@ -71,6 +82,9 @@ function destroy_session(PDO $db): bool {
     return $success;
 }
 
+/**
+    Destroys all sessions for a user
+ */
 function destroy_all_sessions(PDO $db, $user_id) {
     global $SESSION_ID_NAME;
     $query = $db->prepare("DELETE FROM sessions WHERE user_id=?;");
