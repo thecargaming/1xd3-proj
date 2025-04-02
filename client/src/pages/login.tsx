@@ -1,3 +1,4 @@
+import Layout from 'components/layout';
 import { createPostParameters, basePrefix } from 'net_utils';
 import { createRef } from "react"
 
@@ -27,13 +28,13 @@ export default function Login() {
         if (err) err.innerHTML = (await res.json()).msg;
     }
     return (
-        <div>
+        <Layout>
             <form onSubmitCapture={handleLogin}>
                 <input type="email" ref={email} />
                 <input type="password" ref={password} />
                 <button>Login</button>
                 <p ref={error} />
             </form>
-        </div>
+        </Layout>
     )
 }
