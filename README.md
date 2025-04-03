@@ -19,6 +19,7 @@ the database can be found at `server_setup/create_tables.sql`.
 
 # Development
 ## Running the client
+The client will be found at `127.0.0.1:3000/~chenp102/team`
 ```bash
     npm run dev
 ```
