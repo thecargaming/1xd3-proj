@@ -1,7 +1,12 @@
 import type { AppProps } from "next/app";
 
 import '../global.scss';
+import { GlobalStateProvider } from "context";
 
 export default function App({Component, pageProps}: AppProps<any>) {
-    return <Component {...pageProps} />;
+    return (
+        <GlobalStateProvider>
+            <Component {...pageProps} />
+        </GlobalStateProvider>
+    )
 }

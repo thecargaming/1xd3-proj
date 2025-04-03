@@ -1,5 +1,7 @@
+import Layout from 'components/layout';
+import { AccountInfoContext } from 'context';
 import { createPostParameters, basePrefix } from 'net_utils';
-import { createRef } from "react"
+import { createRef, useContext } from "react"
 
 
 export default function Login() {
@@ -8,6 +10,7 @@ export default function Login() {
     const email = createRef<HTMLInputElement>();
     const password = createRef<HTMLInputElement>();
     const error = createRef<HTMLParagraphElement>();
+    const [_, updateAccoutInfo] = useContext(AccountInfoContext);
     const handleLogin = async (e: any) => {
         e.preventDefault();
 
@@ -24,13 +27,14 @@ export default function Login() {
             })
         });
         if (res.ok) {
+            updateAccoutInfo();
             return;
         }
         let err = error.current;
         if (err) err.innerHTML = (await res.json()).msg;
     }
     return (
-        <div>
+        <Layout>
             <form onSubmitCapture={handleLogin}>
                 <input type="text" ref={firstName} placeholder="first name" />
                 <input type="text" ref={lastName} placeholder="last name" />
@@ -39,6 +43,6 @@ export default function Login() {
                 <button>Register</button>
                 <p ref={error} />
             </form>
-        </div>
+        </Layout>
     )
 }

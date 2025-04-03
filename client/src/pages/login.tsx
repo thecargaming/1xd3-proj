@@ -1,12 +1,14 @@
 import Layout from 'components/layout';
+import { AccountInfoContext } from 'context';
 import { createPostParameters, basePrefix } from 'net_utils';
-import { createRef } from "react"
+import { createRef, useContext } from "react"
 
 
 export default function Login() {
     const email = createRef<HTMLInputElement>();
     const password = createRef<HTMLInputElement>();
     const error = createRef<HTMLParagraphElement>();
+    const [_, updateAccountInfo] = useContext(AccountInfoContext);
     const handleLogin = async (e: any) => {
         e.preventDefault();
 
@@ -21,7 +23,7 @@ export default function Login() {
             })
         });
         if (res.ok) {
-            console.log('ok');
+            updateAccountInfo();
             return;
         }
         let err = error.current;
