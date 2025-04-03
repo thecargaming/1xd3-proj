@@ -8,6 +8,7 @@ export default function Booking() {
     const email = createRef<HTMLParagraphElement>();
     const date = createRef<HTMLParagraphElement>();
 
+    const [availability, setAvailability] = useState<any[]>([]); 
 
     const handleBooking = async (e: any) => {
         e.preventDefault();
@@ -21,9 +22,27 @@ export default function Booking() {
                 company: company.current?.value,
                 phone: phone.current?.value,
                 email: email.current?.value,
-                date: date.current?.value
             })
         });
+
+
+    }
+
+    const checkAvailability = async (e: any) => {
+        e.preventDefault();
+        
+        let res = await fetch(basePrefix('/api/auth/date.php'), {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: createPostParameters({
+                date: date.current?.value,
+            })
+        });
+
+        let info = await res.json();
+        setAvailability(data);
 
 
     }
@@ -32,24 +51,30 @@ export default function Booking() {
     <Layout>
         <div>
             <h1>Booking</h1>
+
+            <form id="booking" onSubmitCapture={handleBooking}>
+                <label htmlFor="company">Company:</label>
+                <input type="text" ref={company} placeholder='Company Name'></input>
+                <label htmlFor="lastname">Email Address:</label>
+                <input type="text" ref={email} placeholder='Email Address'></input>
+                <label htmlFor="lastname">Phone:</label>
+                <input type="tel" ref={phone} placeholder='Phone Number'></input>
+                <label htmlFor="booking-date">Date:</label>
+                <input type="date" ref={date} name="booking-date"></input>
+                <button type="submit" id="submit">Submit</button>
+
+                <button onClick={checkAvailability}>Check Avalibility</button>
+
+            </form>   
+
+            <h2>Available Times:</h2>
+
         </div>
-
-        <p>HI</p>
-
-        <form id="booking" onSubmitCapture={handleBooking}>
-            <label htmlFor="company">Company:</label>
-            <input type="text" ref={company} placeholder='Company Name'></input>
-            <label htmlFor="lastname">Email Address:</label>
-            <input type="text" ref={email} placeholder='Email Address'></input>
-            <label htmlFor="lastname">Phone:</label>
-            <input type="tel" ref={phone} placeholder='Phone Number'></input>
-            <label htmlFor="booking-date">Date:</label>
-            <input type="date" ref={date} name="booking-date"></input>
-
-            <button type="submit" id="submit">Submit</button>
-
-        </form>   
     </Layout>
+
+    
+
+// Note: echo doesn't work, need to figure out react table type
   )
 }
 

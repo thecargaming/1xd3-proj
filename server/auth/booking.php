@@ -11,10 +11,10 @@ $date = filter_input(INPUT_POST, "date", FILTER_VALIDATE_REGEXP);
 
 $db = connect_db();
 
-$query = $db->prepare("INSERT ? FROM ? WHERE (?,?,?,?)");
+$query = $db->prepare("INSERT INTO `companies` VALUES (?,?,?,?)");
 $query->execute([$email,$phone,$company,$date]);
 
-// if error send error need assistance
+
 
 
 
