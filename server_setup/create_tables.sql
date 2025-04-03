@@ -23,7 +23,8 @@ CREATE TABLE companies (
     name VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL,
     phone CHAR(10) NOT NULL,
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    UNIQUE(name)
 );
 
 CREATE TABLE representatives (
