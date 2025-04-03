@@ -10,9 +10,9 @@
 //      string address
 //      string phone
 
-include "./lib/db.php";
-include "./lib/send.php";
-include "./lib/auth.php";
+include "../lib/db.php";
+include "../lib/send.php";
+include "../lib/auth.php";
 
 $company = filter_input(INPUT_POST, "company", FILTER_SANITIZE_SPECIAL_CHARS) or send(400, ["msg"=>"no company"]);
 $address = filter_input(INPUT_POST, "address", FILTER_SANITIZE_SPECIAL_CHARS) or send(400, ["msg"=>"no address"]);
