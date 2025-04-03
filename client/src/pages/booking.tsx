@@ -1,14 +1,14 @@
 import { createPostParameters, basePrefix } from 'net_utils';
 import { createRef } from "react";
+import Layout from "components/layout";
+
 
 export default function Booking() {
     
     const phone = createRef<HTMLInputElement>();
     const company = createRef<HTMLInputElement>();
-    const email = createRef<HTMLParagraphElement>();
-    const date = createRef<HTMLParagraphElement>();
-
-    const [availability, setAvailability] = useState<any[]>([]); 
+    const email = createRef<HTMLInputElement>();
+    const date = createRef<HTMLInputElement>();
 
     const handleBooking = async (e: any) => {
         e.preventDefault();
@@ -21,7 +21,7 @@ export default function Booking() {
             body: createPostParameters({
                 company: company.current?.value,
                 phone: phone.current?.value,
-                email: email.current?.value,
+                email: email.current?.value
             })
         });
 
@@ -42,8 +42,6 @@ export default function Booking() {
         });
 
         let info = await res.json();
-        setAvailability(data);
-
 
     }
 
