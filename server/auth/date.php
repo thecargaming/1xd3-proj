@@ -11,6 +11,6 @@ $query = $db->prepare("SELECT `start_time`, `end_time` FROM `avaliability` WHERE
 $query->execute([$date]);
 
 $all = $query->fetchAll();
-echo json_encode($all);
 
+send(400, $all);
 ?>

@@ -39,7 +39,11 @@ export default function Booking() {
             body: createPostParameters({
                 date: date.current?.value,
             })
-        });
+        })
+        if(res.ok){
+            console.log("testing");
+            return;
+        };
 
         let info = await res.json();
 
@@ -61,11 +65,11 @@ export default function Booking() {
                 <input type="date" ref={date} name="booking-date"></input>
                 <button type="submit" id="submit">Submit</button>
 
-                <button onClick={checkAvailability}>Check Avalibility</button>
-
             </form>   
 
+
             <h2>Available Times:</h2>
+            <button onClick={checkAvailability}>Check Avalibility</button>
 
         </div>
     </Layout>

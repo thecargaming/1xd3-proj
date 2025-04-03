@@ -31,7 +31,7 @@ export default function Login() {
     }
     return (
         <div>
-            <form onSubmitCapture={handleLogin}>
+            <form onSubmitCapture={handleLogin} id="register">
                 <input type="text" ref={firstName} placeholder="first name" />
                 <input type="text" ref={lastName} placeholder="last name" />
                 <input type="email" ref={email} placeholder="email" />

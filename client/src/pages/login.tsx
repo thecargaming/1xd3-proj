@@ -7,6 +7,7 @@ export default function Login() {
     const email = createRef<HTMLInputElement>();
     const password = createRef<HTMLInputElement>();
     const error = createRef<HTMLParagraphElement>();
+
     const handleLogin = async (e: any) => {
         e.preventDefault();
 

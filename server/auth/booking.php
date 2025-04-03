@@ -15,7 +15,7 @@ $query = $db->prepare("INSERT INTO `companies` VALUES (?,?,?,?)");
 $query->execute([$email,$phone,$company,$date]);
 
 
-
+send(200, ["msg"=>"success"]);
 
 
 
