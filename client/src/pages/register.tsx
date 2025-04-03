@@ -1,10 +1,12 @@
 import Layout from 'components/layout';
 import { AccountInfoContext } from 'context';
 import { createPostParameters, basePrefix } from 'net_utils';
+import { useRouter } from 'next/router';
 import { createRef, useContext } from "react"
 
 
 export default function Login() {
+    const router = useRouter();
     const firstName = createRef<HTMLInputElement>();
     const lastName = createRef<HTMLInputElement>();
     const email = createRef<HTMLInputElement>();
@@ -28,6 +30,7 @@ export default function Login() {
         });
         if (res.ok) {
             updateAccoutInfo();
+            router.push('/');
             return;
         }
         let err = error.current;

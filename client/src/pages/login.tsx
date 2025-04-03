@@ -1,10 +1,13 @@
 import Layout from 'components/layout';
 import { AccountInfoContext } from 'context';
 import { createPostParameters, basePrefix } from 'net_utils';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { createRef, useContext } from "react"
 
 
 export default function Login() {
+    const router = useRouter();
     const email = createRef<HTMLInputElement>();
     const password = createRef<HTMLInputElement>();
     const error = createRef<HTMLParagraphElement>();
@@ -24,6 +27,7 @@ export default function Login() {
         });
         if (res.ok) {
             updateAccountInfo();
+            router.push('/')
             return;
         }
         let err = error.current;
@@ -36,6 +40,7 @@ export default function Login() {
                 <input type="password" ref={password} />
                 <button>Login</button>
                 <p ref={error} />
+                <Link href="/register">Register an account</Link>
             </form>
         </Layout>
     )
