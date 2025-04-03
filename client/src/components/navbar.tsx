@@ -12,7 +12,7 @@ function AccountInfo() {
         </>
     ); else return (
         <>
-        <p>{accountInfo.firstName} {accountInfo.lastName}</p>
+        <Link href="/account">{accountInfo.firstName} {accountInfo.lastName}</Link>
         </>
     );
 }
