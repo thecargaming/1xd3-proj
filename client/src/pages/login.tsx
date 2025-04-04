@@ -1,9 +1,11 @@
 import Layout from 'components/layout';
+import RoundContainer from 'components/round_container';
 import { AccountInfoContext } from 'context';
 import { createPostParameters, basePrefix } from 'net_utils';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { createRef, useContext } from "react"
+import styles from "./login.module.scss";
 
 
 export default function Login() {
@@ -35,13 +37,21 @@ export default function Login() {
     }
     return (
         <Layout>
-            <form onSubmitCapture={handleLogin}>
-                <input type="email" ref={email} />
-                <input type="password" ref={password} />
-                <button>Login</button>
-                <p ref={error} />
-                <Link href="/register">Register an account</Link>
-            </form>
+            <RoundContainer>
+                <form onSubmitCapture={handleLogin} className={styles.form}>
+                    <div className={styles.field}>
+                        <p>Email</p>
+                        <input type="email" ref={email} />
+                    </div>
+                    <div className={styles.field}>
+                        <p>Password</p>
+                        <input type="password" ref={password} />
+                    </div>
+                    <button>Login</button>
+                    <p ref={error} />
+                    <Link href="/register" className={styles.register}>Register an account</Link>
+                </form>
+            </RoundContainer>
         </Layout>
     )
 }
