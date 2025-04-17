@@ -52,8 +52,8 @@ CREATE TABLE meetings (
     id INT NOT NULL AUTO_INCREMENT,
     representative INT NOT NULL,
     client INT NOT NULL,
-    start_time TIME NOT NULL,
-    end_time TIME NOT NULL,
+    start_time DATETIME NOT NULL,
+    end_time DATETIME NOT NULL,
     PRIMARY KEY(id),
     FOREIGN KEY(representative) REFERENCES representatives(id),
     FOREIGN KEY(client) REFERENCES users(id)
