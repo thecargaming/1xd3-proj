@@ -1,7 +1,8 @@
+@use "../colors.scss" as *;
 .container {
-    background-color: #ddd;
+    background-color: map-get($theme, "bg-3");
     border-radius: 8px;
     border: solid 3px;
-    border-color: #bbb;
+    border-color: map-get($theme, "border");
     padding: 2rem;
 }

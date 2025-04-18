@@ -1,5 +1,12 @@
+@use "./colors.scss" as *;
+
 * {
+    color: map-get($theme, "text");
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+}
+
+html, body, #__next {
+    height: 100%;
 }
