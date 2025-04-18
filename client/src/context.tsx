@@ -5,12 +5,12 @@ export type AccountInfo = {
     firstName: string,
     lastName: string,
     email: string,
-} | null;
+};
 
-export const AccountInfoContext = createContext<[AccountInfo, ()=>void]>([null, ()=>{}]);
+export const AccountInfoContext = createContext<[AccountInfo | null, ()=>void]>([null, ()=>{}]);
 
 export function GlobalStateProvider({children}: {children: ReactNode}) {
-    const [accountInfo, setAccountInfo] = useState(null as AccountInfo);
+    const [accountInfo, setAccountInfo] = useState(null as (AccountInfo | null));
     const updateAccountInfo = async () => {
         let res = await fetch(basePrefix("/api/auth/info.php?name=1&email=1"));
         if (!res.ok) {
@@ -24,6 +24,8 @@ export function GlobalStateProvider({children}: {children: ReactNode}) {
             email
         });
     };
+
+    updateAccountInfo();
 
     return (
         <AccountInfoContext.Provider value={[accountInfo, updateAccountInfo]}>
