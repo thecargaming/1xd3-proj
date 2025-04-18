@@ -10,7 +10,7 @@ export default function Profile() {
     const router = useRouter();
     if (accountInfo == null) {
         setTimeout(()=>{
-            router.push('/');
+            router.push('/login');
         }, 0);
         return;
     };
