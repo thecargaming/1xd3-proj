@@ -3,6 +3,8 @@ import { AccountInfoContext } from 'context';
 import { createPostParameters, basePrefix } from 'net_utils';
 import { useRouter } from 'next/router';
 import { createRef, useContext } from "react"
+import styles from './register.module.scss';
+import RoundContainer from 'components/round_container';
 
 
 export default function Login() {
@@ -38,14 +40,28 @@ export default function Login() {
     }
     return (
         <Layout>
-            <form onSubmitCapture={handleLogin}>
-                <input type="text" ref={firstName} placeholder="first name" />
-                <input type="text" ref={lastName} placeholder="last name" />
-                <input type="email" ref={email} placeholder="email" />
-                <input type="password" ref={password} placeholder="password" />
-                <button>Register</button>
-                <p ref={error} />
-            </form>
+            <RoundContainer>
+                <form onSubmitCapture={handleLogin} className={styles.form}>
+                    <div className={styles.field}>
+                        <p>First Name</p>
+                        <input type="text" ref={firstName}/>
+                    </div>
+                    <div className={styles.field}>
+                        <p>Last Name</p>
+                        <input type="text" ref={lastName} />
+                    </div>
+                    <div className={styles.field}>
+                        <p>Email</p>
+                        <input type="email" ref={email} />
+                    </div>
+                    <div className={styles.field}>
+                        <p>Password</p>
+                        <input type="password" ref={password} />
+                    </div>
+                    <button>Register</button>
+                    <p ref={error} />
+                </form>
+            </RoundContainer>
         </Layout>
     )
 }

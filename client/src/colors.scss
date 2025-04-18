@@ -1,0 +1,29 @@
+@use "sass:map";
+
+$dark-theme: (
+    "text": #ccc,
+    "bg-1": #333,
+    "bg-2": #383838,
+    "bg-3": #444,
+    "input": #334,
+    "interactive": #1e6588,
+    "interactive-hover": #1580aa,
+    "border": #bbb,
+    "nav-bg": #112,
+    "nav-text": #eee,
+);
+
+$light-theme: (
+    "text": #333,
+    "bg-1": #fff,
+    "bg-2": #eee,
+    "bg-3": #ddd,
+    "input": #f8f8ff,
+    "interactive": #1cacf2,
+    "interactive-hover": #3fc0ff,
+    "border": #bbb,
+    "nav-bg": #ddd,
+    "nav-text": #222,
+);
+
+$theme: $dark-theme;
