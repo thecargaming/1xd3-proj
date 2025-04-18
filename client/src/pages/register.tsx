@@ -3,7 +3,7 @@ import { AccountInfoContext } from 'context';
 import { createPostParameters, basePrefix } from 'net_utils';
 import { useRouter } from 'next/router';
 import { createRef, useContext } from "react"
-import styles from './login.module.scss';
+import styles from './register.module.scss';
 import RoundContainer from 'components/round_container';
 
 
