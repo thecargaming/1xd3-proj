@@ -7,14 +7,22 @@ import styles from './register.module.scss';
 import RoundContainer from 'components/round_container';
 
 
-export default function Login() {
+export default function Register() {
     const router = useRouter();
     const firstName = createRef<HTMLInputElement>();
     const lastName = createRef<HTMLInputElement>();
     const email = createRef<HTMLInputElement>();
     const password = createRef<HTMLInputElement>();
     const error = createRef<HTMLParagraphElement>();
-    const [_, updateAccoutInfo] = useContext(AccountInfoContext);
+    const [accountInfo, updateAccountInfo] = useContext(AccountInfoContext);
+    if (accountInfo != null) {
+        // update and try again
+        updateAccountInfo();
+        if (accountInfo != null) {
+            router.push('/account');
+            return;
+        }
+    }
     const handleLogin = async (e: any) => {
         e.preventDefault();
 
@@ -31,7 +39,7 @@ export default function Login() {
             })
         });
         if (res.ok) {
-            updateAccoutInfo();
+            updateAccountInfo();
             router.push('/');
             return;
         }

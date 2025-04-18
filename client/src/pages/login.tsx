@@ -13,7 +13,15 @@ export default function Login() {
     const email = createRef<HTMLInputElement>();
     const password = createRef<HTMLInputElement>();
     const error = createRef<HTMLParagraphElement>();
-    const [_, updateAccountInfo] = useContext(AccountInfoContext);
+    const [accountInfo, updateAccountInfo] = useContext(AccountInfoContext);
+    if (accountInfo != null) {
+        // update and try again
+        updateAccountInfo();
+        if (accountInfo != null) {
+            router.push('/account');
+            return;
+        }
+    }
     const handleLogin = async (e: any) => {
         e.preventDefault();
 
