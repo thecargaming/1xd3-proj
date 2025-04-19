@@ -19,6 +19,8 @@ $address = filter_input(INPUT_POST, "address", FILTER_SANITIZE_SPECIAL_CHARS) or
 $phone = filter_input(INPUT_POST, "phone") or send(400, ["msg"=>"no phone number"]);
 
 if (!preg_match('/^[0-9]{10}$/', $phone)) send(400, ["msg"=>"invalid phone number"]);
+if (strlen($company) <= 4) send(400, ["msg"=>"company name is too short"]);
+if (strlen($address) == 0) send(400, ["msg"=>"address must be provided"]);
 
 try {
     $db = connect_db();
@@ -32,7 +34,7 @@ try {
         ]);
     }
     send(500, [
-        "msg" => "unknown "
+        "msg" => "unknown"
     ]);
 }
 
