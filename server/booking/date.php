@@ -30,5 +30,5 @@ while($test = $query->fetch()){
 
 }
 
-send(200, $all); // check if handling json encoding
+send(200, $all); // need to check if send function doing json encoding
 ?>

@@ -1,4 +1,5 @@
 import { createPostParameters, basePrefix } from 'net_utils';
+import React, {useState} from 'react';
 import { createRef } from "react";
 import Layout from "components/layout";
 
@@ -30,6 +31,14 @@ export default function Booking() {
 
     }
 
+    type DataInfo = {
+        name: string;
+        email: string;
+        time: string;
+      };
+      
+    const [data, setData] = useState<DataInfo[]>([]);
+
     const checkAvailability = async (e: any) => {
         e.preventDefault();
       
@@ -41,12 +50,13 @@ export default function Booking() {
           body: createPostParameters({
             start_date: start_date.current?.value,
             end_date: end_date.current?.value
-          })
+          }).toString()
         });
+        
       
         if (res.ok) {
           const data = await res.json(); 
-          console.log("Available bookings:", data);
+          setData(data);
         }
 
         
@@ -78,12 +88,21 @@ export default function Booking() {
             <h2>Available Times:</h2>
             <button onClick={checkAvailability}>Check Avalibility</button>
 
+
+
+            <ul>
+                {data.map((person, index) => (
+                    <li key={index}>
+                        <p>{person.name}</p>
+                        <p>{person.email}</p>
+                        <p>{person.time}</p>
+                    </li>
+                ))}
+            </ul>
+
+        
         </div>
     </Layout>
-
-    
-
-// Note: echo doesn't work, need to figure out react table type
   )
 }
 
