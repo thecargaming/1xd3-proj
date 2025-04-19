@@ -10,9 +10,9 @@
 //      string email [optional]
 //      string phone [optional]
 
-include "./lib/db.php";
-include "./lib/send.php";
-include "./lib/auth.php";
+include "../lib/db.php";
+include "../lib/send.php";
+include "../lib/auth.php";
 
 $company = filter_input(INPUT_POST, "company", FILTER_SANITIZE_SPECIAL_CHARS);
 $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
