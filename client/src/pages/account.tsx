@@ -1,5 +1,6 @@
 import Layout from "components/layout";
 import { RegisterCompany } from "components/register_company";
+import { RegisterRepresentative } from "components/register_representative";
 import { AccountInfoContext } from "context";
 import { basePrefix } from "net_utils";
 import { useRouter } from "next/router";
@@ -31,6 +32,7 @@ export default function Profile() {
         <h2>{accountInfo.email}</h2>
         <button onClick={logout}>Log out <BiLogOut /></button>
         <RegisterCompany />
+        <RegisterRepresentative />
         </Layout>
     )
 }
