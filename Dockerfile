@@ -12,6 +12,8 @@ WORKDIR /app/client/client
 COPY ./client/package*.json ./
 RUN npm i --ci
 COPY ./client/ .
+WORKDIR /app/client/server
+COPY ./server/ .
 WORKDIR /app/client/
 COPY ./package.json ./
 COPY ./scripts/ ./scripts
