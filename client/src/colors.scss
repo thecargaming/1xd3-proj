@@ -11,6 +11,9 @@ $dark-theme: (
     "border": #bbb,
     "nav-bg": #112,
     "nav-text": #eee,
+    "calendar-available": #71712b,
+    "calendar-client": #185324,
+    "calendar-representative": #2b216a,
 );
 
 $light-theme: (
@@ -24,6 +27,9 @@ $light-theme: (
     "border": #bbb,
     "nav-bg": #ddd,
     "nav-text": #222,
+    "calendar-available": #eeee7c,
+    "calendar-client": #6acc7d,
+    "calendar-representative": #9cafe8,
 );
 
 $theme: $dark-theme;
