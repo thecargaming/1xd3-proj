@@ -1,6 +1,6 @@
 export function createPostParameters(params: Object): string {
     return Object.keys(params)
-        .map((key) => [`${key}=${(params as any) [key]}`])
+        .flatMap((key) => ((params as any)[key]===null || (params as any)[key] === "") ? [] : [`${key}=${(params as any) [key]}`])
         .join('&');
 }
 
