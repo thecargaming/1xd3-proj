@@ -8,6 +8,7 @@
     "build-client": "mkdir -p dist/client && (cd client && npm run build) && cp -r ./client/out/* dist/client",
     "build-server": "mkdir -p dist/server && cp -r server/* dist/server",
     "test": "sh ./scripts/validate_client.sh ./client ./server && sh ./scripts/validate_server.sh ./server",
+    "deploy": "npm run build && (cd dist && tar -czf - ./public) | ssh chenp102@cs1xd3.cas.mcmaster.ca 'tar -xzf - && rm -rf overlay/team && mv public overlay/team && ./apply_overlay.sh'",
     "lint": "(cd client && npm run lint)",
     "preview": "(cd client && npm run preview)"
   }
