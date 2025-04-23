@@ -8,7 +8,7 @@ include "../lib/auth.php";
 
 
 
-$email = filter_input(INPUT_POST, "email");
+$email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_SPECIAL_CHARS);
 $phone = filter_input(INPUT_POST, "phone_number",FILTER_SANITIZE_SPECIAL_CHARS);
 $company = filter_input(INPUT_POST, "company", FILTER_SANITIZE_SPECIAL_CHARS);
 $date = filter_input(INPUT_POST, "date");

@@ -9,8 +9,8 @@ export default function Booking() {
     const phone = createRef<HTMLInputElement>();
     const company = createRef<HTMLInputElement>();
     const email = createRef<HTMLInputElement>();
-    const start_date = createRef<HTMLInputElement>();
-    const end_date = createRef<HTMLInputElement>();
+    const chosen = createRef<HTMLSelectElement>();    
+    const date = createRef<HTMLInputElement>();
 
 
     const handleBooking = async (event: any) => {
@@ -31,13 +31,26 @@ export default function Booking() {
 
     }
 
-    type DataInfo = {
+    type nameInfo = {
         name: string;
+
+    }
+
+
+    type DataInfo = {
+        full_name: string;
         email: string;
         time: string;
       };
       
     const [data, setData] = useState<DataInfo[]>([]);
+    const [nameData, setName] = useState<nameInfo[]>([]);
+
+    fetch(basePrefix('/api/booking/names.php'))
+    .then(res => res.json())
+    .then(data => {
+      setName(data);
+    })
 
     const checkAvailability = async (e: any) => {
         e.preventDefault();
@@ -48,8 +61,8 @@ export default function Booking() {
             "Content-Type": "application/x-www-form-urlencoded",
           },
           body: createPostParameters({
-            start_date: start_date.current?.value,
-            end_date: end_date.current?.value
+            chosen: chosen.current?.value,
+            date: date.current?.value
           }).toString()
         });
         
@@ -75,29 +88,35 @@ export default function Booking() {
                 <input type="text" ref={email} placeholder='Email Address'></input>
                 <label htmlFor="lastname">Phone:</label>
                 <input type="tel" ref={phone} placeholder='Phone Number'></input>
-                <label htmlFor="booking-date">Start Date:</label>
-                <input type="date" ref={start_date} name="booking-date"></input>
-                <label htmlFor="booking-date">End Date:</label>
-                <input type="date" ref={end_date} name="booking-date"></input>
-
                 <button type="submit" id="submit">Submit</button>
 
             </form>   
 
+            <form id="checking" onSubmitCapture={checkAvailability}>
 
-            <h2>Available Times:</h2>
-            <button onClick={checkAvailability}>Check Avalibility</button>
+                <select ref={chosen}>
+                    {nameData.map((person, index) => (
+                            <option key={index} value={person.name}>
+                                {person.name}
+                            </option>
+                        ))}
+                </select>
 
+                <label htmlFor="booking-date">Date:</label>
+                <input type="date" ref={date} name="booking-date"></input>
+                <button type="submit" id="submit">Submit</button>
 
+            </form>
 
             <ul>
                 {data.map((person, index) => (
                     <li key={index}>
-                        <p>{person.name}</p>
+                        <p>{person.full_name}</p>
                         <p>{person.email}</p>
                         <p>{person.time}</p>
                     </li>
                 ))}
+
             </ul>
 
         
