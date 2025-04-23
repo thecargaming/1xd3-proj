@@ -1,0 +1,4 @@
+# debug env variables
+SetEnv DATABASE_NAME "chenp102_db"
+SetEnv DATABASE_USERNAME "chenp102_local"
+SetEnv DATABASE_PASSWORD "password"
