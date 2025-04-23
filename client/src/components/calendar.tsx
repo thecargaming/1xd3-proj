@@ -17,6 +17,10 @@ function sameDay(a: Date, b: Date): boolean {
         && a.getDate() === b.getDate());
 }
 
+function Bar({height}: {height: number}) {
+    return <div className={styles.bar} style={{top: `${100*height}%`}} />
+}
+
 function CalendarEvent({event, date}: {event: CalendarEvent, date: Date}) {
     let eventType = {
         "available": styles.eventAvailable,
@@ -28,12 +32,16 @@ function CalendarEvent({event, date}: {event: CalendarEvent, date: Date}) {
     let max = 24*60*60;
     if (!sameDay(event.begin, date)) begin=0;
     if (!sameDay(event.end, date)) end=max;
+    let showName = sameDay(event.begin, date);
 
     return (
         <div style={{
             top: `${100*begin/max}%`,
             height: `${100*(end-begin)/max}%`,
-        }} className={`${styles.event} ${eventType}`}>
+        }} className={`${styles.event} ${eventType}`}
+        title={`${event.begin.toLocaleTimeString()} - ${event.end.toLocaleTimeString()}\n${event.description || ""}`}
+        >
+        {showName && event.name ? <p>{event.name}</p> : <></>}
         </div>
     )
 }
@@ -41,6 +49,7 @@ function CalendarEvent({event, date}: {event: CalendarEvent, date: Date}) {
 function CalendarColumnDisplay(props: CalendarColumnDisplayProps) {
     return (
         <div className={styles.calendarColumnDisplay}>
+            {[...Array(23).keys()].map((i) => <Bar height={(i+1)/24} />)}
             {props.events.map((e) => (
                 <CalendarEvent event={e} date={props.date} />
             ))}
