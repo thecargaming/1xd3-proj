@@ -1,5 +1,5 @@
 import { createPostParameters, basePrefix } from 'net_utils';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { createRef } from "react";
 import Layout from "components/layout";
 
@@ -46,11 +46,15 @@ export default function Booking() {
     const [data, setData] = useState<DataInfo[]>([]);
     const [nameData, setName] = useState<nameInfo[]>([]);
 
-    fetch(basePrefix('/api/booking/names.php'))
-    .then(res => res.json())
-    .then(data => {
-      setName(data);
-    })
+    useEffect(() => {
+
+        fetch(basePrefix('/api/booking/names.php'))
+        .then(res => res.json())
+        .then(data => {
+          setName(data);
+        })
+    
+    }, []);
 
     const checkAvailability = async (e: any) => {
         e.preventDefault();
