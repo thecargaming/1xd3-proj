@@ -3,10 +3,15 @@ include "../lib/db.php";
 include "../lib/send.php";
 include "../lib/auth.php";
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
 // Retrieving all the avaliable dates within time period
 
 
-$date = filter_input(INPUT_POST, "date", FILTER_SANITIZE_SPECIAL_CHARS);
+$date = filter_input(INPUT_POST, "date");
 $chosen = filter_input(INPUT_POST, "chosen");
 $db = connect_db();
 
@@ -17,34 +22,37 @@ if(!$date){
 
 if(!$chosen){
     send(400, ["error" => "Representative not chosen"]);
+    exit;
 }
 
-$split_name = explode(' ', $name);
-$query = $db->prepare("SELECT `user_id`, FROM `representative` WHERE `first_name` = ?, `last_name` = ?");
+$split_name = explode(' ', $chosen);
+$query = $db->prepare("SELECT `id` FROM `users` WHERE `first_name` = ? AND `last_name` = ?");
 $query->execute([$split_name[0],$split_name[1]]);
 
 $representative_id = $query->fetch();
 
+if(!$representative_id){
+    send(400, ["error" => "Representative ID not found"]);
+    exit;
+}
+
+$id_value = $representative_id['id'];
 
 $new_date = new DateTime($date);
 $dayOfWeek = $new_date->format('w');
 
 $query = $db->prepare("
-    SELECT avaliability.start_time, avaliability.end_time,users.first_name,users.last_name
-    FROM avaliability
-    INNER JOIN representatives ON representatives.userid = avaliability.representative
-    INNER JOIN users ON user.id = representatives.user_id
-    WHERE day_of_week = ?
-    AND representatives = ?
-");
+SELECT availability.start_time, availability.end_time,users.first_name, users.last_name
+FROM availability INNER JOIN representatives ON representatives.user_id = availability.representative
+INNER JOIN users ON users.id = representatives.user_id WHERE availability.day_of_week = ? AND representatives.id = ?");
 
-$query->execute([$dayOfWeek. $representative_id]);
+$query->execute([$dayOfWeek, $id_value]);
 
 $all = [];
 
 while($test = $query->fetch()){
     $thing = [
-        "full_name" => $test["name"],
+        "full_name" => $chosen,
         "start_time" => $test["start_time"],
         "end_time" => $test["end_time"]
     ];

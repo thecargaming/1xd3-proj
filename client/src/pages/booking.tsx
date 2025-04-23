@@ -39,8 +39,8 @@ export default function Booking() {
 
     type DataInfo = {
         full_name: string;
-        email: string;
-        time: string;
+        start_time: string;
+        end_time: string;
       };
       
     const [data, setData] = useState<DataInfo[]>([]);
@@ -116,8 +116,8 @@ export default function Booking() {
                 {data.map((person, index) => (
                     <li key={index}>
                         <p>{person.full_name}</p>
-                        <p>{person.email}</p>
-                        <p>{person.time}</p>
+                        <p>{person.start_time}</p>
+                        <p>{person.end_time}</p>
                     </li>
                 ))}
 
