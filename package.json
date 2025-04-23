@@ -5,7 +5,7 @@
     "docker": "docker compose build && docker compose down && docker compose up",
     "dev": "(cd client && npm run dev)",
     "build": "mkdir -p dist/public/api && npm run build-client && npm run build-server && cp -r dist/client/* dist/public && cp -r dist/server/* dist/public/api",
-    "build-client": "mkdir -p dist/client && (cd client && npm run build) && cp -r ./client/out/* dist/client",
+    "build-client": "sh ./scripts/validate_client.sh ./client ./server && mkdir -p dist/client && (cd client && npm run build) && cp -r ./client/out/* dist/client",
     "build-server": "sh ./scripts/validate_server.sh ./server && mkdir -p dist/server && cp -r server/* dist/server",
     "lint": "(cd client && npm run lint)",
     "preview": "(cd client && npm run preview)"
