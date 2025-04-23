@@ -1,0 +1,50 @@
+@use '../colors.scss' as *;
+.calendar {
+    display: flex;
+    flex-direction: row;
+    background-color: map-get($theme, "bg-3");
+    border: solid 2px map-get($theme, "border");
+    border-radius: 8px;
+    overflow: hidden;
+    > * {
+      width: 100%;
+    }
+}
+
+.calendarColumn {
+    width: 100%;
+    p {
+        padding: 0.5rem;
+    }
+}
+
+.calendarColumnDisplay {
+    width: 100%;
+    height: 30rem;
+    position: relative;
+    background-color: map-get($theme, "bg-1");
+    border: solid 1px map-get($theme, "border");
+}
+
+.event {
+    position: absolute;
+    width: 100%;
+}
+
+.eventAvailable {
+    background-color: map-get($theme, "calendar-available");
+}
+.eventClient {
+    background-color: map-get($theme, "calendar-client");
+}
+.eventRepresentative {
+    background-color: map-get($theme, "calendar-representative");
+}
+
+.bar {
+    position: absolute;
+    width: 100%;
+    height: 0;
+    border-bottom: solid 1px map-get($theme, "border");
+    opacity: 0.25;
+}
