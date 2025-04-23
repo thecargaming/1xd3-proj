@@ -1,5 +1,5 @@
 import { basePrefix } from "net_utils";
-import { createContext, useState, type ReactNode } from "react";
+import { createContext, useEffect, useState, type ReactNode } from "react";
 
 export type AccountInfo = {
     firstName: string,
@@ -25,7 +25,7 @@ export function GlobalStateProvider({children}: {children: ReactNode}) {
         });
     };
 
-    updateAccountInfo();
+    useEffect(()=>{updateAccountInfo()}, []);
 
     return (
         <AccountInfoContext.Provider value={[accountInfo, updateAccountInfo]}>
