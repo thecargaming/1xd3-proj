@@ -20,7 +20,7 @@ if(!$chosen){
 }
 
 $split_name = explode(' ', $name);
-$query = $db->prepare("SELECT `id`, FROM `representative` WHERE `first_name` = ?, `last_name` = ?");
+$query = $db->prepare("SELECT `user_id`, FROM `representative` WHERE `first_name` = ?, `last_name` = ?");
 $query->execute([$split_name[0],$split_name[1]]);
 
 $representative_id = $query->fetch();
