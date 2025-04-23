@@ -1,0 +1,13 @@
+@use "../colors.scss" as *;
+
+.button {
+    border: none;
+    padding: 4px;
+    border-radius: 4px;
+    background-color: map-get($theme, "interactive");
+    transition: ease-out 0.2s;
+
+    &:hover {
+        background-color: map-get($theme, "interactive-hover");
+    }
+}
