@@ -44,7 +44,7 @@ $all = [];
 
 while($test = $query->fetch()){
     $thing = [
-        "full_name" = $test["name"];
+        "full_name" => $test["name"],
         "start_time" => $test["start_time"],
         "end_time" => $test["end_time"]
     ];
