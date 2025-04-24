@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import { useContext } from "react";
 import { BiLogOut } from "react-icons/bi";
 import styles from './account.module.scss';
+import Link from "next/link";
 
 export default function Profile() {
     const [accountInfo, updateAccountInfo] = useContext(AccountInfoContext);
@@ -44,6 +45,9 @@ export default function Profile() {
                 <RegisterCompany />
                 <RegisterRepresentative />
             </HLayout>
+            <RoundContainer>
+                <Link href="/representative">Representative</Link>
+            </RoundContainer>
         </VLayout>
         </Layout>
     )

@@ -41,7 +41,7 @@ CREATE TABLE representatives (
 CREATE TABLE availability (
     id INT NOT NULL AUTO_INCREMENT,
     representative INT NOT NULL,
-    day_of_week INT NOT NULL,
+    day_of_week INT NOT NULL, -- 0 for sunday, 1 for monday, etc.
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
     PRIMARY KEY(id),
