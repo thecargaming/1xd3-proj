@@ -23,10 +23,10 @@ include "../lib/auth.php";
 include "../lib/db.php";
 include "../lib/send.php";
 
-$rep_id = filter_input(INPUT_GET, "representative_id", FILTER_VALIDATE_INT);
-$start = filter_input(INPUT_GET, "start_time");
-$end = filter_input(INPUT_GET, "end_time");
-$day_of_week = filter_input(INPUT_GET, "day_of_week", FILTER_VALIDATE_INT);
+$rep_id = filter_input(INPUT_POST, "representative_id", FILTER_VALIDATE_INT);
+$start = filter_input(INPUT_POST, "start_time");
+$end = filter_input(INPUT_POST, "end_time");
+$day_of_week = filter_input(INPUT_POST, "day_of_week", FILTER_VALIDATE_INT);
 
 if (is_null($day_of_week) || $day_of_week < 0 || $day_of_week >= 7) send(400, ["msg"=>"invalid day of week"]);
 $validate_time_regex = '/^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/';
@@ -38,9 +38,9 @@ $user_id = get_user_id($db);
 if (is_null($user_id)) send(400, ["msg"=>"not logged in"]);
 
 $query = $db->prepare("
-SELECT COUNT(*) FROM representative
+SELECT COUNT(*) FROM representatives
 INNER JOIN users ON users.id=representatives.user_id
-WHERE representative.id=?
+WHERE representatives.id=?
 AND users.id=?;
 ");
 if (!$query->execute([$rep_id, $user_id])) send(500, ["msg"=>"unknown"]);
@@ -53,8 +53,8 @@ SELECT COUNT(*) FROM users
 INNER JOIN representatives ON representatives.user_id=users.id
 INNER JOIN availability ON representatives.id=availability.representative
 WHERE users.id=?
-AND CONVERT(CONVERT('?', TIME), INT) < CONVERT(availability.end_time, INT)
-AND CONVERT(CONVERT('?', TIME), INT) > CONVERT(availability.start_time, INT)
+AND CONVERT(CONVERT(?, TIME), INT) < CONVERT(availability.end_time, INT)
+AND CONVERT(CONVERT(?, TIME), INT) > CONVERT(availability.start_time, INT)
 AND availability.day_of_week=?;
 ");
 if (!$query->execute([$user_id, $start, $end, $day_of_week])) send(500, ["msg"=>"unknown"]);
