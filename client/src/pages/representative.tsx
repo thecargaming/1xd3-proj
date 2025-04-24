@@ -2,7 +2,7 @@ import Layout from "components/layout";
 import RoundContainer from "components/round_container";
 import VLayout from "components/v_layout";
 import { AccountInfoContext } from "context";
-import { basePrefix } from "net_utils";
+import { basePrefix, createPostParameters } from "net_utils";
 import { useRouter } from "next/router";
 import { createRef, useContext, useEffect, useState } from "react";
 import styles from './representative.module.scss';
@@ -40,6 +40,29 @@ export default function Representative() {
             end_time: new Date(`1970-01-${4+a.day_of_week} ${a.end_time}`),
             id: a.id,
         })));
+    };
+
+    const insertStart = createRef<HTMLInputElement>();
+    const insertEnd = createRef<HTMLInputElement>();
+    const insertDayOfWeek = createRef<HTMLSelectElement>();
+    const insertAvailability = async () => {
+        let start = `${insertStart.current?.value}:00`;
+        let end = `${insertEnd.current?.value}:00`;
+        let day_of_week: number = parseInt(insertDayOfWeek.current?.value || "0");
+        let res = await fetch(basePrefix('/api/representative/set_availability.php'), {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: createPostParameters({
+                start_time: start,
+                end_time: end,
+                representative_id: selectedCompany?.representative_id,
+                day_of_week: day_of_week,
+            })
+        });
+        if (!res.ok) console.error(await res.json());
+        await updateAvailability();
     };
 
     useEffect(()=>{(async() => {
@@ -88,7 +111,30 @@ export default function Representative() {
                         </RoundContainer>
                         <HLayout>
                             <RoundContainer>
-                                <h1>Insert availability slow</h1>
+                                <div className={styles.form}>
+                                    <h1>Insert availability slow</h1>
+                                    <div className={styles.field}>
+                                        <p>start</p>
+                                        <input type="time" ref={insertStart} />
+                                    </div>
+                                    <div className={styles.field}>
+                                        <p>end</p>
+                                        <input type="time" ref={insertEnd} />
+                                    </div>
+                                    <div className={styles.field}>
+                                        <p>Day of week</p>
+                                        <select ref={insertDayOfWeek}>
+                                            <option value="0">Sunday</option>
+                                            <option value="1">Monday</option>
+                                            <option value="2">Tuesday</option>
+                                            <option value="3">Wednesday</option>
+                                            <option value="4">Thursday</option>
+                                            <option value="5">Friday</option>
+                                            <option value="6">Saturday</option>
+                                        </select>
+                                    </div>
+                                    <button onClick={insertAvailability}>Insert</button>
+                                </div>
                             </RoundContainer>
                             <RoundContainer>
                                 <h1>Delete availability slow</h1>
