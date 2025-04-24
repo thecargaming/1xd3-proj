@@ -29,6 +29,7 @@ export default function Representative() {
     const [availability, setAvailability] = useState<Availability[]>([]);
     const selectedCompanyElement = createRef<HTMLSelectElement>();
 
+    const DAYS_OF_WEEK = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const updateAvailability = async () => {
         let res = await fetch(basePrefix('/api/representative/get_availability.php'));
         if (!res.ok) {console.log(await res.json()); return;}
@@ -64,6 +65,21 @@ export default function Representative() {
         if (!res.ok) console.error(await res.json());
         await updateAvailability();
     };
+
+    const deleteAvailabilityIdentifier = createRef<HTMLSelectElement>();
+    const deleteAvailability = async () => {
+        let res = await fetch(basePrefix('/api/representative/delete_availability.php'), {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: createPostParameters({
+                availability_id: deleteAvailabilityIdentifier.current?.value
+            })
+        });
+        if (!res.ok) console.error(await res.json());
+        await updateAvailability();
+    }
 
     useEffect(()=>{(async() => {
         if (accountInfo == null) {
@@ -124,20 +140,25 @@ export default function Representative() {
                                     <div className={styles.field}>
                                         <p>Day of week</p>
                                         <select ref={insertDayOfWeek}>
-                                            <option value="0">Sunday</option>
-                                            <option value="1">Monday</option>
-                                            <option value="2">Tuesday</option>
-                                            <option value="3">Wednesday</option>
-                                            <option value="4">Thursday</option>
-                                            <option value="5">Friday</option>
-                                            <option value="6">Saturday</option>
+                                            {[...Array(7).keys()].map((i) => (
+                                                <option value={i}>{DAYS_OF_WEEK[i]}</option>
+                                            ))}
                                         </select>
                                     </div>
                                     <button onClick={insertAvailability}>Insert</button>
                                 </div>
                             </RoundContainer>
                             <RoundContainer>
-                                <h1>Delete availability slow</h1>
+                                <div className={styles.form}>
+                                    <h1>Delete availability</h1>
+                                    <select ref={deleteAvailabilityIdentifier}>
+                                        {availability.filter((i) => i.company_name === selectedCompany.company_name)
+                                            .map((i) => (
+                                            <option value={i.id}>{DAYS_OF_WEEK[i.day_of_week]} {i.start_time.toLocaleTimeString()} - {i.end_time.toLocaleTimeString()}</option>
+                                        ))}
+                                    </select>
+                                    <button onClick={deleteAvailability}>Delete</button>
+                                </div>
                             </RoundContainer>
                         </HLayout>
                         <WeekCalendar events={availability.map((a) => ({
