@@ -1,0 +1,7 @@
+@use '../colors.scss' as *;
+.companyList {
+    padding: 0.25rem;
+    border: none;
+    border-radius: 8px;
+    background-color: map-get($theme, "input");
+}
