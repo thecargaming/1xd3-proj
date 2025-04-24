@@ -17,12 +17,18 @@
           width: 100%;
         }
 
-        input {
+        input, select {
             border: none;
             padding: 4px;
             border-radius: 4px;
             background-color: map-get($theme, "input");
         }
+    }
+    input, select {
+        border: none;
+        padding: 4px;
+        border-radius: 4px;
+        background-color: map-get($theme, "input");
     }
 
     button {
