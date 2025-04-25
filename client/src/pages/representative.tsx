@@ -134,7 +134,7 @@ export default function Representative() {
                         <HLayout>
                             <RoundContainer>
                                 <div className={styles.form}>
-                                    <h1>Insert availability slow</h1>
+                                    <h1>Insert availability slot</h1>
                                     <div className={styles.field}>
                                         <p>start</p>
                                         <input type="time" ref={insertStart} />
