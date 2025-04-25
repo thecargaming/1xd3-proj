@@ -7,27 +7,37 @@ export function RegisterRepresentative() {
     const name = createRef<HTMLInputElement>();
     const email = createRef<HTMLInputElement>();
     const phone = createRef<HTMLInputElement>();
+    const submit = createRef<HTMLInputElement>();
     const error = createRef<HTMLParagraphElement>();
-    const register = async (e: any) => {
-        e.preventDefault();
+
+    const isValid = (): boolean => {
         if (error.current)
             error.current.innerHTML = "";
-
         if (!name.current || name.current?.value.length == 0) {
             if (error.current)
                 error.current.innerHTML = "company name must be provided";
-            return;
+            if (submit.current) submit.current.disabled = true;
+            return false;
+        }
+        if (!email.current || (email.current.value.length != 0 && !(/^[0-9a-zA-Z_-]+@[0-9a-zA-Z_-]+\.[0-9a-zA-Z_-]+/).test(email.current.value))) {
+            if (error.current)
+                error.current.innerHTML = "email is invalid";
+            if (submit.current) submit.current.disabled = true;
+            return false;
         }
         if (!phone.current || (phone.current.value.length != 0 && !(/^[0-9]{10}$/).test(phone.current?.value))) {
             if (error.current)
                 error.current.innerHTML = "invalid phone number";
-            return;
+            if (submit.current) submit.current.disabled = true;
+            return false;
         }
-        if (!email.current || (email.current.value.length != 0 && !(/^[0-9a-zA-Z]+@[0-9a-zA-Z]+\.[0-9a-zA-Z]+/).test(email.current.value))) {
-            if (error.current)
-                error.current.innerHTML = "email is invalid";
-            return;
-        }
+        if (submit.current) submit.current.disabled = false;
+        return true;
+    }
+
+    const register = async (e: any) => {
+        e.preventDefault();
+        if (!isValid()) return;
 
         let res = await fetch(basePrefix('/api/representative/register.php'), {
             method: "POST",
@@ -56,17 +66,17 @@ export function RegisterRepresentative() {
                 <h1>Register as a Representative</h1>
                 <div className={styles.field}>
                     <p>Company Name</p>
-                    <input ref={name} />
+                    <input ref={name} onInput={isValid} />
                 </div>
                 <div className={styles.field}>
                     <p>email</p>
-                    <input ref={email} />
+                    <input ref={email} onInput={isValid} />
                 </div>
                 <div className={styles.field}>
                     <p>phone</p>
-                    <input ref={phone} />
+                    <input ref={phone} onInput={isValid} />
                 </div>
-                <input type="submit" value="Register" />
+                <input type="submit" value="Register" ref={submit} disabled />
                 <p ref={error}/>
             </form>
         </RoundContainer>

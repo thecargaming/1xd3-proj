@@ -46,7 +46,21 @@ export default function Representative() {
     const insertStart = createRef<HTMLInputElement>();
     const insertEnd = createRef<HTMLInputElement>();
     const insertDayOfWeek = createRef<HTMLSelectElement>();
+    const insertSubmit = createRef<HTMLButtonElement>();
+    const isInsertValid = (): boolean => {
+        if (!(/^([0-1][0-9]|2[0-3]):[0-5][0-9]$/).test(insertStart.current?.value || "")) {
+            if (insertSubmit.current) insertSubmit.current.disabled = true;
+            return false;
+        }
+        if (!(/^([0-1][0-9]|2[0-3]):[0-5][0-9]$/).test(insertEnd.current?.value || "")) {
+            if (insertSubmit.current) insertSubmit.current.disabled = true;
+            return false;
+        }
+        if (insertSubmit.current) insertSubmit.current.disabled = false;
+        return true;
+    }
     const insertAvailability = async () => {
+        if (!isInsertValid()) return;
         let start = `${insertStart.current?.value}:00`;
         let end = `${insertEnd.current?.value}:00`;
         let day_of_week: number = parseInt(insertDayOfWeek.current?.value || "0");
@@ -137,33 +151,39 @@ export default function Representative() {
                                     <h1>Insert availability slot</h1>
                                     <div className={styles.field}>
                                         <p>start</p>
-                                        <input type="time" ref={insertStart} />
+                                        <input type="time" ref={insertStart} onInput={isInsertValid} />
                                     </div>
                                     <div className={styles.field}>
                                         <p>end</p>
-                                        <input type="time" ref={insertEnd} />
+                                        <input type="time" ref={insertEnd} onInput={isInsertValid} />
                                     </div>
                                     <div className={styles.field}>
                                         <p>Day of week</p>
-                                        <select ref={insertDayOfWeek}>
+                                        <select ref={insertDayOfWeek} onInput={isInsertValid} >
                                             {[...Array(7).keys()].map((i) => (
                                                 <option value={i}>{DAYS_OF_WEEK[i]}</option>
                                             ))}
                                         </select>
                                     </div>
-                                    <button onClick={insertAvailability}>Insert</button>
+                                    <button onClick={insertAvailability} ref={insertSubmit}>Insert</button>
                                 </div>
                             </RoundContainer>
                             <RoundContainer>
                                 <div className={styles.form}>
                                     <h1>Delete availability</h1>
-                                    <select ref={deleteAvailabilityIdentifier}>
-                                        {availability.filter((i) => i.company_name === selectedCompany.company_name)
-                                            .map((i) => (
-                                            <option value={i.id}>{DAYS_OF_WEEK[i.day_of_week]} {i.start_time.toLocaleTimeString()} - {i.end_time.toLocaleTimeString()}</option>
-                                        ))}
-                                    </select>
-                                    <button onClick={deleteAvailability}>Delete</button>
+                                    {availability.filter((i) => i.company_name === selectedCompany.company_name).length > 0 ? (
+                                        <>
+                                        <select ref={deleteAvailabilityIdentifier}>
+                                            {availability.filter((i) => i.company_name === selectedCompany.company_name)
+                                                .map((i) => (
+                                                <option value={i.id}>{DAYS_OF_WEEK[i.day_of_week]} {i.start_time.toLocaleTimeString()} - {i.end_time.toLocaleTimeString()}</option>
+                                            ))}
+                                        </select>
+                                        <button onClick={deleteAvailability}>Delete</button>
+                                        </>
+                                    ) : (
+                                        <p>No availability slots exists for the currently selected company.</p>
+                                    )}
                                 </div>
                             </RoundContainer>
                         </HLayout>
