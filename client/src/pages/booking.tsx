@@ -2,7 +2,7 @@ import { createPostParameters, basePrefix } from 'net_utils';
 import React, {useEffect, useState} from 'react';
 import { createRef } from "react";
 import Layout from "components/layout";
-
+import styles from './Style.module.css'
 
 export default function Booking() {
     const chosen = createRef<HTMLSelectElement>();    
@@ -93,47 +93,77 @@ export default function Booking() {
       
   return (
     <Layout>
-        <div>
-            <h1>Booking</h1>
+        <div className={styles.main}>
+            <div className={styles.form_design}>
+                <form className={styles.test} onSubmitCapture={checkAvailability}>
+                    <label htmlFor="company">Company:</label>
+                    <select className={styles.check} ref={company_chosen} onChange={representativeInfo}>
+                            <option value="" disabled selected>Select a company</option>
+                            {companyData.map((company, index) => (
+                                    <option key={index} value={company.name}>
+                                        {company.name}
+                                    </option>
+                                ))}
+                        </select>
 
-            <form id="checking" onSubmitCapture={checkAvailability}>
+                    <label htmlFor="company">Name:</label>
+                    <select ref={chosen} disabled>
 
-                <select ref={company_chosen} onChange={representativeInfo}>
-                        <option value="" disabled selected>Select a company</option>
-                        {companyData.map((company, index) => (
-                                <option key={index} value={company.name}>
-                                    {company.name}
+                        <option value="" disabled selected>Select a name</option>
+                        {nameData.map((person, index) => (
+                                <option key={index} value={person.name}>
+                                    {person.name}
                                 </option>
                             ))}
                     </select>
 
+                    <label htmlFor="booking-date">Date:</label>
+                    <input type="date" ref={date} name="booking-date"></input>
+                    <button type="submit" id="submit">Submit</button>
 
-                <select ref={chosen} disabled>
-                    {nameData.map((person, index) => (
-                            <option key={index} value={person.name}>
-                                {person.name}
-                            </option>
-                        ))}
-                </select>
+                </form>
+            </div>
 
-                <label htmlFor="booking-date">Date:</label>
-                <input type="date" ref={date} name="booking-date"></input>
-                <button type="submit" id="submit">Submit</button>
+            <div className={styles.tableside}>
 
-            </form>
+                <div className={styles.innertable}>
+                    <div className={styles.eachone}>
+                            <div className={styles.header}>
+                                <h1>PUT NAME HERE</h1>
+                            </div>
 
-            <ul>
-                {data.map((person, index) => (
-                    <li key={index}>
-                        <p>{person.full_name}</p>
-                        <p>{person.start_time}</p>
-                        <p>{person.end_time}</p>
-                    </li>
-                ))}
+                            <div className={styles.body}>
+                                <p>Time: START_TIME-END_TIME</p>
+                                <p>Location: Keep blank for now</p>
 
-            </ul>
+                            </div>
+                    </div>
 
+                    {data.map((person, index) => (
+                        <div className={styles.eachone} key={index}>
+                            <div className={styles.header}>
+                            <h1>{person.full_name}</h1>
+                            </div>
+
+                            <div className={styles.body}>
+                            <p>Time: {person.start_time}-{person.end_time}</p>
+                            <p>Location: Keeping blank for now</p>
+                            </div>
+                        </div>
+                    ))}
         
+
+
+
+
+            
+
+  
+
+
+                </div>
+
+            </div>        
         </div>
     </Layout>
   )
