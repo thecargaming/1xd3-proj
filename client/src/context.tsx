@@ -17,14 +17,19 @@ export function GlobalStateProvider({children}: {children: ReactNode}) {
             setAccountInfo(null);
             return null;
         }
-        let {first_name, last_name, email} = await res.json();
-        let a = {
-            firstName: first_name,
-            lastName: last_name,
-            email
-        };
-        setAccountInfo(a);
-        return a;
+        let {logged_in, first_name, last_name, email} = await res.json();
+        if (logged_in) {
+            let a = {
+                firstName: first_name,
+                lastName: last_name,
+                email
+            };
+            setAccountInfo(a);
+            return a;
+        } else {
+            setAccountInfo(null);
+            return null;
+        }
     };
 
     useEffect(()=>{updateAccountInfo()}, []);
