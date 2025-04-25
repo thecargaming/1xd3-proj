@@ -19,6 +19,12 @@
         }
     }
 
+    button[disabled], input[disabled] {
+        background-color: map-get($theme, "interactive-disable") !important;
+        &:hover {
+            background-color: map-get($theme, "interactive-disable") !important;
+        }
+    }
     button, input[type=button], input[type=submit] {
         border: none;
         padding: 4px;
