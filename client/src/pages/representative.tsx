@@ -95,9 +95,10 @@ export default function Representative() {
 
         let res = await fetch(basePrefix('/api/representative/get_representing.php'));
         if (!res.ok) {console.log(await res.json()); return;}
-        setCompanies(await res.json());
-        if (companies.length) {
-            setSelectedCompany(companies[0])
+        let fetchedCompanies =await res.json();
+        setCompanies(fetchedCompanies);
+        if (fetchedCompanies.length) {
+            setSelectedCompany(fetchedCompanies[0]);
             if (selectedCompanyElement.current)
                 selectedCompanyElement.current.value = "0";
         }
