@@ -7,7 +7,7 @@ export type AccountInfo = {
     email: string,
 };
 
-export const AccountInfoContext = createContext<[AccountInfo | null, ()=>void]>([null, ()=>{}]);
+export const AccountInfoContext = createContext<[AccountInfo | null, ()=>Promise<AccountInfo | null>]>([null, async()=>null]);
 
 export function GlobalStateProvider({children}: {children: ReactNode}) {
     const [accountInfo, setAccountInfo] = useState(null as (AccountInfo | null));
@@ -15,14 +15,16 @@ export function GlobalStateProvider({children}: {children: ReactNode}) {
         let res = await fetch(basePrefix("/api/auth/info.php?name=1&email=1"));
         if (!res.ok) {
             setAccountInfo(null);
-            return;
+            return null;
         }
         let {first_name, last_name, email} = await res.json();
-        setAccountInfo({
+        let a = {
             firstName: first_name,
             lastName: last_name,
             email
-        });
+        };
+        setAccountInfo(a);
+        return a;
     };
 
     useEffect(()=>{updateAccountInfo()}, []);

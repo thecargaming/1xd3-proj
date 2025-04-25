@@ -7,7 +7,7 @@ import VLayout from "components/v_layout";
 import { AccountInfoContext } from "context";
 import { basePrefix } from "net_utils";
 import { useRouter } from "next/router";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { BiLogOut } from "react-icons/bi";
 import styles from './account.module.scss';
 import Link from "next/link";
@@ -15,21 +15,26 @@ import Link from "next/link";
 export default function Profile() {
     const [accountInfo, updateAccountInfo] = useContext(AccountInfoContext);
     const router = useRouter();
-    if (accountInfo == null) {
-        setTimeout(()=>{
-            router.push('/login');
-        }, 0);
-        return;
-    };
+
+    useEffect(()=>{(async() => {
+        if (accountInfo !== null) return;
+        if (await updateAccountInfo() === null) {
+            setTimeout(()=>{
+                router.push('/login');
+            }, 0);
+        };
+    })()}, []);
 
     const logout = async () => {
         let res = await fetch(basePrefix('/api/auth/logout.php'));
         if (!res.ok) {
             console.error(await res.text());
         }
-        updateAccountInfo();
+        await updateAccountInfo();
         router.push('/');
     }
+
+    if (accountInfo == null) return <Layout><></></Layout>
 
     return (
         <Layout>

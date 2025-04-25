@@ -23,7 +23,7 @@ type Availability = {
 };
 
 export default function Representative() {
-    const [accountInfo, _] = useContext(AccountInfoContext);
+    const [accountInfo, updateAccountInfo] = useContext(AccountInfoContext);
     const router = useRouter();
     const [companies, setCompanies] = useState<Company[]>([]);
     const [availability, setAvailability] = useState<Availability[]>([]);
@@ -82,23 +82,29 @@ export default function Representative() {
     }
 
     useEffect(()=>{(async() => {
-        if (accountInfo == null) {
+        if (accountInfo !== null) return;
+        if (await updateAccountInfo() === null) {
             setTimeout(()=>{
                 router.push('/login');
             }, 0);
-            return;
         };
+    })()}, []);
+
+    useEffect(()=>{(async()=>{
+        if (accountInfo === null) return;
 
         let res = await fetch(basePrefix('/api/representative/get_representing.php'));
         if (!res.ok) {console.log(await res.json()); return;}
-        setCompanies(await res.json());
-        if (companies.length) {
-            setSelectedCompany(companies[0])
+        let fetchedCompanies =await res.json();
+        setCompanies(fetchedCompanies);
+        if (fetchedCompanies.length) {
+            setSelectedCompany(fetchedCompanies[0]);
             if (selectedCompanyElement.current)
                 selectedCompanyElement.current.value = "0";
         }
         await updateAvailability();
-    })()}, []);
+
+    })()}, [accountInfo])
 
     const [selectedCompany, setSelectedCompany] = useState(null as Company | null);
 
@@ -128,7 +134,7 @@ export default function Representative() {
                         <HLayout>
                             <RoundContainer>
                                 <div className={styles.form}>
-                                    <h1>Insert availability slow</h1>
+                                    <h1>Insert availability slot</h1>
                                     <div className={styles.field}>
                                         <p>start</p>
                                         <input type="time" ref={insertStart} />

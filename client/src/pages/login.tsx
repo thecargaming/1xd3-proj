@@ -36,7 +36,7 @@ export default function Login() {
             })
         });
         if (res.ok) {
-            updateAccountInfo();
+            await updateAccountInfo();
             router.push('/')
             return;
         }

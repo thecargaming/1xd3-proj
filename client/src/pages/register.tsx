@@ -39,7 +39,7 @@ export default function Register() {
             })
         });
         if (res.ok) {
-            updateAccountInfo();
+            await updateAccountInfo();
             router.push('/');
             return;
         }
