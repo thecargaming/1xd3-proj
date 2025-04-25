@@ -23,7 +23,7 @@ type Availability = {
 };
 
 export default function Representative() {
-    const [accountInfo, _] = useContext(AccountInfoContext);
+    const [accountInfo, updateAccountInfo] = useContext(AccountInfoContext);
     const router = useRouter();
     const [companies, setCompanies] = useState<Company[]>([]);
     const [availability, setAvailability] = useState<Availability[]>([]);
@@ -82,12 +82,16 @@ export default function Representative() {
     }
 
     useEffect(()=>{(async() => {
-        if (accountInfo == null) {
+        if (accountInfo !== null) return;
+        if (await updateAccountInfo() === null) {
             setTimeout(()=>{
                 router.push('/login');
             }, 0);
-            return;
         };
+    })()}, []);
+
+    useEffect(()=>{(async()=>{
+        if (accountInfo === null) return;
 
         let res = await fetch(basePrefix('/api/representative/get_representing.php'));
         if (!res.ok) {console.log(await res.json()); return;}
@@ -98,7 +102,8 @@ export default function Representative() {
                 selectedCompanyElement.current.value = "0";
         }
         await updateAvailability();
-    })()}, []);
+
+    })()}, [accountInfo])
 
     const [selectedCompany, setSelectedCompany] = useState(null as Company | null);
 
