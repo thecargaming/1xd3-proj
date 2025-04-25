@@ -25,6 +25,7 @@ $data = $query->fetchAll();
 $companies = [];
 foreach ($data as $d) {
     $companies[$d["name"]] = [
+        "name" => $d["name"],
         "address" => $d["address"],
         "phone" => $d["phone"],
     ];

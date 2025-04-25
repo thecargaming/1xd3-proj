@@ -5,56 +5,68 @@ import Layout from "components/layout";
 
 
 export default function Booking() {
-    
-    const phone = createRef<HTMLInputElement>();
-    const company = createRef<HTMLInputElement>();
-    const email = createRef<HTMLInputElement>();
     const chosen = createRef<HTMLSelectElement>();    
     const date = createRef<HTMLInputElement>();
-
-
-    const handleBooking = async (event: any) => {
-        event.preventDefault();
-        
-        let res = await fetch(basePrefix('/api/booking/booking.php'), {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: createPostParameters({
-                company: company.current?.value,
-                phone: phone.current?.value,
-                email: email.current?.value
-            })
-        });
-
-
-    }
+    const company_chosen = createRef<HTMLSelectElement>();    
 
     type nameInfo = {
         name: string;
-
     }
-
 
     type DataInfo = {
         full_name: string;
         start_time: string;
         end_time: string;
       };
+
+    type companyInfo = {
+        name: string;
+      }
       
-    const [data, setData] = useState<DataInfo[]>([]);
-    const [nameData, setName] = useState<nameInfo[]>([]);
+      
+    const [companyData, setCompanyData] = useState<companyInfo[]>([]);
 
     useEffect(() => {
-
-        fetch(basePrefix('/api/booking/names.php'))
+        fetch(basePrefix('/api/booking/companies.php'))
         .then(res => res.json())
         .then(data => {
-          setName(data);
+            setCompanyData(data);
         })
     
     }, []);
+
+
+    const [data, setData] = useState<DataInfo[]>([]);
+    const [nameData, setName] = useState<nameInfo[]>([]);
+
+    
+    const representativeInfo = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const companyName = e.target.value;
+    
+        const res = await fetch(basePrefix('/api/booking/names.php'), {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: createPostParameters({
+                company: companyName
+            }).toString()
+
+        });
+
+
+        if(res.ok){
+            const data = await res.json();
+            setName(data);
+
+            if (chosen.current) {    
+                chosen.current.disabled = false;
+              
+            }   
+          
+        }
+            
+    }
 
     const checkAvailability = async (e: any) => {
         e.preventDefault();
@@ -78,27 +90,25 @@ export default function Booking() {
 
         
       };
-
       
   return (
     <Layout>
         <div>
             <h1>Booking</h1>
 
-            <form id="booking" onSubmitCapture={handleBooking}>
-                <label htmlFor="company">Company:</label>
-                <input type="text" ref={company} placeholder='Company Name'></input>
-                <label htmlFor="lastname">Email Address:</label>
-                <input type="text" ref={email} placeholder='Email Address'></input>
-                <label htmlFor="lastname">Phone:</label>
-                <input type="tel" ref={phone} placeholder='Phone Number'></input>
-                <button type="submit" id="submit">Submit</button>
-
-            </form>   
-
             <form id="checking" onSubmitCapture={checkAvailability}>
 
-                <select ref={chosen}>
+                <select ref={company_chosen} onChange={representativeInfo}>
+                        <option value="" disabled selected>Select a company</option>
+                        {companyData.map((company, index) => (
+                                <option key={index} value={company.name}>
+                                    {company.name}
+                                </option>
+                            ))}
+                    </select>
+
+
+                <select ref={chosen} disabled>
                     {nameData.map((person, index) => (
                             <option key={index} value={person.name}>
                                 {person.name}
