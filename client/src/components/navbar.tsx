@@ -8,13 +8,23 @@ function AccountInfo() {
     const [accountInfo, _] = useContext(AccountInfoContext);
     if (accountInfo === null) return (
         <>
-        <Link href="/login">Login</Link>
+        <button><Link href="/register">Register</Link></button>
+        <button><Link href="/login">Login</Link></button>
+
         </>
     ); else return (
         <>
-        <Link href="/account">{accountInfo.firstName} {accountInfo.lastName}</Link>
+            <Link href="/booking"><button>Booking</button></Link>
+            <Link href="/appointmentbooked"><button>Booked Appointments</button></Link>
+            <Link href="/account">{`${accountInfo.firstName} ${accountInfo.lastName}`}</Link>
         </>
     );
+}
+
+function OtherPages(){
+    return (
+        <Link href="/about">About us</Link>
+    )
 }
 
 export default function NavBar() {

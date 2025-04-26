@@ -71,7 +71,6 @@ $all = [];
 
 while($test = $query->fetch()){
     if(availability_booked($dayOfWeek,$date,$test["start_time"],$test["end_time"],$id_value)){
-        die("went through");
         $thing = [
             "full_name" => $chosen,
             "start_time" => $test["start_time"],

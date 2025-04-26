@@ -74,7 +74,7 @@ export default function Login() {
                     </div>
                     <button ref={submit} disabled>Login</button>
                     <p ref={error} />
-                    <Link href="/register" className={styles.register}>Register an account</Link>
+                    <Link href="/register" className={styles.register}>Don't have an account?</Link>
                 </form>
             </RoundContainer>
         </Layout>
