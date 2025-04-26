@@ -9,6 +9,11 @@ include "../lib/auth.php";
 $db = connect_db();
 $client_id = get_user_id($db);
 
+// if null redirect obviously to login
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 
 $query = $db->prepare("
@@ -19,6 +24,7 @@ JOIN users ON representatives.user_id = users.id WHERE meetings.id = ?;
 
 $query->execute([$client_id]);
 
+$all = [];
 
 while($meeting = $query->fetch()){
     $details = [
