@@ -19,10 +19,18 @@ export default function Booking() {
         end_time: string;
       };
 
+    type ChosePerson = {
+        full_name: string;
+        date: string;
+        start_time: string;
+        end_time: string;
+      };
+
     type companyInfo = {
         name: string;
       }
       
+    
       
     const [companyData, setCompanyData] = useState<companyInfo[]>([]);
 
@@ -68,6 +76,8 @@ export default function Booking() {
             
     }
 
+    // also could just do that ? "" just in case
+
     const checkAvailability = async (e: any) => {
         e.preventDefault();
       
@@ -90,6 +100,46 @@ export default function Booking() {
 
         
       };
+
+      const bookingHandler = async (e: any) => {
+        e.preventDefault();
+
+        if(!selectedperson){
+            return;
+        }
+
+        const nameSplit = selectedperson["full_name"].split(" ");
+
+        const res = await fetch(basePrefix('/api/booking/booking.php'), {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: createPostParameters({
+              first_name: nameSplit[0],
+              last_name: nameSplit[1],
+              date: selectedperson["date"],
+              start_time: selectedperson["start_time"],
+              end_time: selectedperson["end_time"]
+            }).toString()
+          });
+
+          if (res.ok){
+            console.log("Properly sent.. yayy!");
+          }
+
+      }
+
+    const [selectedperson, setselectedperson] = useState<ChosePerson | null>(null);
+
+    function meetingHandler(person: DataInfo) {
+        setselectedperson({
+            full_name: person["full_name"],
+            date: date.current?.value ?? "",
+            start_time: person["start_time"],
+            end_time: person["end_time"]
+        });
+    }
       
   return (
     <Layout>
@@ -121,7 +171,18 @@ export default function Booking() {
                     <input type="date" ref={date} name="booking-date"></input>
                     <button type="submit" id="submit">Submit</button>
 
+
                 </form>
+
+                {selectedperson && (
+                        <div>
+                        <p>Name: {selectedperson["full_name"]}</p>
+                        <p>Date:{selectedperson["date"]}</p>
+                        <p>Time: {selectedperson["start_time"]}-{selectedperson["end_time"]}</p>
+                        <button onClick={bookingHandler}>Book meeting!</button>
+                        </div>
+                )}
+
             </div>
 
             <div className={styles.tableside}>
@@ -140,14 +201,15 @@ export default function Booking() {
                     </div>
 
                     {data.map((person, index) => (
-                        <div className={styles.eachone} key={index}>
+                        <div className={styles.eachone} key={index} onClick={() => meetingHandler(person)}>
                             <div className={styles.header}>
-                            <h1>{person.full_name}</h1>
+                                <h1>{person.full_name}</h1>
                             </div>
 
                             <div className={styles.body}>
-                            <p>Time: {person.start_time}-{person.end_time}</p>
-                            <p>Location: Keeping blank for now</p>
+                                <p>Time: {person.start_time}-{person.end_time}</p>
+                                <p>Location: Keeping blank for now</p>
+
                             </div>
                         </div>
                     ))}
