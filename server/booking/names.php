@@ -25,9 +25,9 @@ $first_query->execute([$company]);
 $company_id= $first_query->fetchColumn();
 
 $query = $db->prepare("
-    SELECT CONCAT(users.first_name, ' ', users.last_name) AS name
-    FROM representatives 
-    JOIN users ON representatives.user_id = users.id
+    SELECT representatives.id,users.first_name,users.last_name
+    FROM representatives
+    INNER JOIN users ON representatives.user_id = users.id
     WHERE `company` = ?
 ");
 
@@ -38,7 +38,8 @@ $array = [];
 
 while($choice = $query->fetch()){
     $thing = [
-        "name" => $choice["name"]
+        "name" => "$choice[first_name] $choice[last_name]",
+        "id" => $choice["id"],
     ];
 
     array_push($array, $thing);

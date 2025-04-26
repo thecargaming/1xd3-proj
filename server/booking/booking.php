@@ -8,8 +8,7 @@
 // the sql database 
 // Method: POST
 // Parameters
-//   string first_name
-//   string last_name
+//   int representative (id)
 //   string start_time
 //   string end_time
 //   string date
@@ -20,15 +19,13 @@ include "../lib/send.php";
 include "../lib/auth.php";
 
 
-$first_name = filter_input(INPUT_POST, "first_name");
-$last_name = filter_input(INPUT_POST, "last_name");
-
+$rep_id = filter_input(INPUT_POST, "representative", FILTER_VALIDATE_INT);
 $start_time = filter_input(INPUT_POST, "start_time", FILTER_SANITIZE_SPECIAL_CHARS);
 $end_time = filter_input(INPUT_POST, "end_time",FILTER_SANITIZE_SPECIAL_CHARS);
 
 $date = filter_input(INPUT_POST, "date");
 
-if(!$first_name || !$last_name || !$start_time || !$end_time || !$date){
+if(!$rep_id || !$start_time || !$end_time || !$date){
     send(400, ["error" => "An error occured in the booking process"]);
     exit;
 }
@@ -42,24 +39,34 @@ if(!$user_id){
     send(401,["msg"=>"not logged in"]);
 }
 
+$new_date = new DateTime($date);
+$dayOfWeek = $new_date->format('w');
 
-$query = $db->prepare("    
-    SELECT representatives.user_id 
-    FROM representatives
-    JOIN users ON representatives.user_id = users.id
-    WHERE users.first_name = ? AND users.last_name = ?
+$query = $db->prepare("
+SELECT COUNT(*) > 0 FROM representatives
+INNER JOIN users on users.id=representatives.user_id
+INNER JOIN availability ON availability.representative=representatives.id
+WHERE availability.day_of_week = ?
+AND CONVERT(CONVERT(?, TIME), INT) >= CONVERT(availability.start_time, INT)
+AND CONVERT(CONVERT(?, TIME), INT) <= CONVERT(availability.end_time, INT)
+AND (
+    SELECT COUNT(*) FROM meetings
+    INNER JOIN representatives AS rep ON meetings.representative=rep.id
+    WHERE (meetings.client=users.id OR rep.user_id=users.id)
+    AND CONVERT(CONVERT(?, DATETIME), INT) < CONVERT(meetings.end_time, INT)
+    AND CONVERT(CONVERT(?, DATETIME), INT) > CONVERT(meetings.start_time, INT)
+    ) = 0
+AND representatives.id = ?;
 ");
-
-$query->execute([$first_name,$last_name]);
-$representative_id = $query->fetchColumn();
-
-$start = $date . ' ' . $start_time; 
-$end = $date . ' ' . $end_time; 
+if (!$query->execute([$dayOfWeek, $start_time, $end_time, "$date $start_time", "$date $end_time", $rep_id]))
+    send(500, ["msg" => "unknown"]);
+if (!(bool)($query->fetch()[0])) send(400, ["msg" => "no available time"]);
+$query->closeCursor();
 
 
 
 $query = $db->prepare("INSERT INTO `meetings` (`representative`, `client`, `start_time`, `end_time`) VALUES (?,?,?,?)");
-$test = $query->execute([$representative_id, $user_id ,$start, $end]);
+$test = $query->execute([$rep_id, $user_id ,"$date $start_time", "$date $end_time"]);
 
 if($test){
     send(200, ["msg"=>"success"]);

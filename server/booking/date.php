@@ -11,7 +11,7 @@
 // Method: POST
 // Parameters
 //      string date
-//      string chosen (representative)
+//      string chosen (representative id)
 
 
 ini_set('display_errors', 1);
@@ -30,7 +30,7 @@ include "./conflict_checker.php";
 
 
 $date = filter_input(INPUT_POST, "date");
-$chosen = filter_input(INPUT_POST, "chosen");
+$chosen = filter_input(INPUT_POST, "chosen", FILTER_VALIDATE_INT);
 $db = connect_db();
 
 if(!$date){
@@ -43,43 +43,37 @@ if(!$chosen){
     exit;
 }
 
-$split_name = explode(' ', $chosen);
-$query = $db->prepare("SELECT `id` FROM `users` WHERE `first_name` = ? AND `last_name` = ?");
-$query->execute([$split_name[0],$split_name[1]]);
-
-$representative_id = $query->fetch();
-
-if(!$representative_id){
-    send(400, ["error" => "Representative ID not found"]);
-    exit;
-}
-
-
-$id_value = $representative_id['id'];
-
 $new_date = new DateTime($date);
 $dayOfWeek = $new_date->format('w');
 
 $query = $db->prepare("
-SELECT availability.start_time, availability.end_time,users.first_name, users.last_name
-FROM availability INNER JOIN representatives ON representatives.user_id = availability.representative
-INNER JOIN users ON users.id = representatives.user_id WHERE availability.day_of_week = ? AND representatives.id = ?");
+SELECT availability.start_time,availability.end_time,CONCAT(users.first_name, ' ', users.last_name) as name FROM availability
+INNER JOIN representatives ON representatives.user_id = availability.representative
+INNER JOIN users ON users.id = representatives.user_id
+WHERE availability.day_of_week = ?
+AND representatives.id = ?
+AND (
+    SELECT COUNT(*) FROM meetings
+    INNER JOIN representatives AS rep ON meetings.representative=rep.id
+    WHERE (meetings.client=users.id OR rep.user_id=users.id)
+    AND CONVERT(CONVERT(CONCAT(?, availability.start_time), DATETIME), INT) < CONVERT(meetings.end_time, INT)
+    AND CONVERT(CONVERT(CONCAT(?, availability.end_time), DATETIME), INT) > CONVERT(meetings.start_time, INT)
+    ) = 0
+    ");
 
-$query->execute([$dayOfWeek, $id_value]);
+$query->execute([$dayOfWeek, $chosen, "$date ", "$date "]);
 
 $all = [];
 
 while($test = $query->fetch()){
-    if(availability_booked($dayOfWeek,$date,$test["start_time"],$test["end_time"],$id_value)){
-        $thing = [
-            "full_name" => $chosen,
-            "start_time" => $test["start_time"],
-            "end_time" => $test["end_time"]
-        ];
-        array_push($all, $thing);
-    }
+    $thing = [
+        "full_name" => $test["name"],
+        "start_time" => $test["start_time"],
+        "end_time" => $test["end_time"],
+        "id" => $chosen,
+    ];
 
-    
+    array_push($all, $thing);
 }
 
 send(200, $all); 

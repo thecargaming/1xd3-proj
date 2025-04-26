@@ -17,15 +17,18 @@ export default function Booking() {
     // Defining the types 
     type nameInfo = {
         name: string;
+        id: number;
     }
 
     type DataInfo = {
+        id: number;
         full_name: string;
         start_time: string;
         end_time: string;
       };
 
     type ChosePerson = {
+        id: number;
         full_name: string;
         date: string;
         start_time: string;
@@ -140,20 +143,17 @@ export default function Booking() {
             return;
         }
 
-        const nameSplit = selectedperson["full_name"].split(" ");
-
         const res = await fetch(basePrefix('/api/booking/booking.php'), {
             method: "POST",
             headers: {
               "Content-Type": "application/x-www-form-urlencoded",
             },
             body: createPostParameters({
-              first_name: nameSplit[0],
-              last_name: nameSplit[1],
-              date: selectedperson["date"],
-              start_time: selectedperson["start_time"],
-              end_time: selectedperson["end_time"]
-            }).toString()
+                representative: selectedperson.id,
+              date: selectedperson.date,
+              start_time: selectedperson.start_time,
+              end_time: selectedperson.end_time,
+            })
           });
 
           if (res.ok){
@@ -172,6 +172,7 @@ export default function Booking() {
 
     function meetingHandler(person: DataInfo) {
         setselectedperson({
+            id: person.id,
             full_name: person["full_name"],
             date: date.current?.value ?? "",
             start_time: person["start_time"],
@@ -203,7 +204,7 @@ export default function Booking() {
                                 <select ref={chosen} disabled onInput={checkAvailability}>
                                     <option value="" disabled selected>Select a name</option>
                                     {nameData.map((person, index) => (
-                                            <option key={index} value={person.name}>
+                                            <option key={index} value={person.id}>
                                                 {person.name}
                                             </option>
                                         ))}
