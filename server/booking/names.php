@@ -1,4 +1,17 @@
 <?php
+
+// Name:    Ahyan Khan
+// Date:    2025-04-22
+//
+// Purpose:
+// Picking all the names inside of a company 
+// and sending it through a ajax query to be shown 
+// to the user
+// Method: POST
+// Parameters
+//      string company
+
+
 include "../lib/db.php";
 include "../lib/send.php";
 include "../lib/auth.php";

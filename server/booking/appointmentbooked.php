@@ -1,5 +1,11 @@
 <?php
 
+// Name:    Ahyan Khan
+// Date:    2025-04-26
+//
+// Purpose:
+// To retrieve all the meetings that the client booked
+
 
 include "../lib/db.php";
 include "../lib/send.php";
@@ -11,9 +17,7 @@ $client_id = get_user_id($db);
 
 // if null redirect obviously to login
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+
 
 
 $query = $db->prepare("

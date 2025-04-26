@@ -1,45 +1,51 @@
 <?php
 
-// Purpose to book
+// Name:    Ahyan Khan
+// Date:    2025-04-22
+//
+// Purpose:
+// To actually book the meeting and send it to
+// the sql database 
+// Method: POST
+// Parameters
+//   string first_name
+//   string last_name
+//   string start_time
+//   string end_time
+//   string date
+
 
 include "../lib/db.php";
 include "../lib/send.php";
 include "../lib/auth.php";
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-
-/*
-
-Temporary comment but needed to prevent access to page
-    if(!$user_id){
-        die("Please login/register to access this page");
-    }
 
 
 
-*/
-
-
-
-// i need to look for company too to match
 
 $first_name = filter_input(INPUT_POST, "first_name");
 $last_name = filter_input(INPUT_POST, "last_name");
-
-// time issues as well
 
 $start_time = filter_input(INPUT_POST, "start_time", FILTER_SANITIZE_SPECIAL_CHARS);
 $end_time = filter_input(INPUT_POST, "end_time",FILTER_SANITIZE_SPECIAL_CHARS);
 
 $date = filter_input(INPUT_POST, "date");
 
+if(!$first_name || !$last_name || !$start_time || !$end_time || !$date){
+    send(400, ["error" => "An error occured in the booking process"]);
+    exit;
+}
+
 
 $db = connect_db();
 $user_id = get_user_id($db);
 
+if(!$user_id){
+    header("Location: /login/");
+    exit;
+}
+
+//    die("Please login/register to access this page");
 
 // Slight problem with identifying users for putting into insert
 
