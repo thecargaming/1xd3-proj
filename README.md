@@ -10,7 +10,7 @@
 After building the server, copy it to the htdocs directory.
 ```bash
     mkdir -p "$HTDOCS_DIR/~chenp102/team"
-    cp dist/* "$HTDOCS_DIR/~chenp102/team"
+    cp dist/public/* "$HTDOCS_DIR/~chenp102/team"
 ```
 The database credentials are stored in environment variables. An example of
 setting env can be found at `server_setup/.htaccess`. Replace the env with the
