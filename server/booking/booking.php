@@ -10,7 +10,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-$user_id = get_user_id($db);
 
 /*
 
@@ -39,6 +38,8 @@ $date = filter_input(INPUT_POST, "date");
 
 
 $db = connect_db();
+$user_id = get_user_id($db);
+
 
 // Slight problem with identifying users for putting into insert
 
