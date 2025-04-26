@@ -27,13 +27,7 @@ $date = filter_input(INPUT_POST, "date");
 $db = connect_db();
 
 // Slight problem with identifying users for putting into insert
-$session_id = get_user_id($db);
-
-$query = $db->prepare("SELECT `id` FROM `representatives` WHERE `user_id` = ?");
-$query->execute([$session_id]);
-
-$user_id = $query->fetchColumn();
-
+$user_id = get_user_id($db);
 
 $query = $db->prepare("    
     SELECT representatives.user_id 
