@@ -1,7 +1,10 @@
 import { createPostParameters, basePrefix } from 'net_utils';
-import React, {useEffect,useState} from 'react';
+import React, {useEffect,useState,useContext} from 'react';
 import Layout from "components/layout";
-import styles from '../css/Style.module.css'
+import styles from '../css/Style.module.css';
+import { useRouter } from "next/router";
+import { AccountInfoContext } from "context";
+
 
 
 export default function AppointmentLookup(){
@@ -11,6 +14,22 @@ export default function AppointmentLookup(){
             start_time: string;
             end_time: string;
         };
+
+        // Redirects if user not registered
+         const [accountInfo, updateAccountInfo] = useContext(AccountInfoContext);
+            const router = useRouter();
+        
+            useEffect(()=>{(async() => {
+                if (accountInfo !== null) return;
+                if (await updateAccountInfo() === null) {
+                    setTimeout(()=>{
+                        router.push('/login');
+                    }, 0);
+                };
+            })()}, []);
+
+
+        // Ajax queries to see all the appointments booked under the user
           
         const [data, setData] = useState<DataInfo[]>([]);
     

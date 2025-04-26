@@ -1,14 +1,19 @@
 import { createPostParameters, basePrefix } from 'net_utils';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect,useContext, useState} from 'react';
 import { createRef } from "react";
 import Layout from "components/layout";
-import styles from '../css/Style.module.css'
+import styles from '../css/Style.module.css';
+import { useRouter } from "next/router";
+import { AccountInfoContext } from "context";
+
+
 
 export default function Booking() {
     const chosen = createRef<HTMLSelectElement>();    
     const date = createRef<HTMLInputElement>();
     const company_chosen = createRef<HTMLSelectElement>();    
 
+    // Defining the types 
     type nameInfo = {
         name: string;
     }
@@ -31,9 +36,23 @@ export default function Booking() {
       }
       
     
-      
+    // Redirects if user not registered
+    const [accountInfo, updateAccountInfo] = useContext(AccountInfoContext);
+    const router = useRouter();
+
+    useEffect(()=>{(async() => {
+        if (accountInfo !== null) return;
+        if (await updateAccountInfo() === null) {
+            setTimeout(()=>{
+                router.push('/login');
+            }, 0);
+        };
+    })()}, []);
+
+
     const [companyData, setCompanyData] = useState<companyInfo[]>([]);
 
+    // AJAX queries for a list of companies
     useEffect(() => {
         fetch(basePrefix('/api/booking/companies.php'))
         .then(res => res.json())
@@ -47,6 +66,12 @@ export default function Booking() {
     const [data, setData] = useState<DataInfo[]>([]);
     const [nameData, setName] = useState<nameInfo[]>([]);
 
+    
+        /**
+        * An ajax query that fetches all the names listed 
+        * under a specific company the user chose
+        * Post Parameters: company: companyname
+        */
     
     const representativeInfo = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         const companyName = e.target.value;
@@ -73,10 +98,16 @@ export default function Booking() {
             }   
           
         }
+
+        if (!res.ok) console.error(await res.json());
             
     }
 
-    // also could just do that ? "" just in case
+        /**
+        * An ajax query that checks under 
+        * the date the avaliable time slots for the user
+        * Post Parameters: chosen (representative): string, date: string
+        */
 
     const checkAvailability = async (e: any) => {
         e.preventDefault();
@@ -98,8 +129,15 @@ export default function Booking() {
           setData(data);
         }
 
-        
+        if (!res.ok) console.error(await res.json());
+
       };
+
+        /**
+        * Another ajax query that checks under 
+        * that submits all the information
+        *
+        */
 
       const bookingHandler = async (e: any) => {
         e.preventDefault();
@@ -128,9 +166,16 @@ export default function Booking() {
             console.log("Properly sent.. yayy!");
           }
 
+          if (!res.ok) console.error(await res.json());
+
       }
 
     const [selectedperson, setselectedperson] = useState<ChosePerson | null>(null);
+
+        /**
+        * Basically sets the selected person and 
+        * all their information so that it could be submitted
+        */
 
     function meetingHandler(person: DataInfo) {
         setselectedperson({

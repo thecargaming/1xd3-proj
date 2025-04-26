@@ -20,9 +20,6 @@ include "../lib/send.php";
 include "../lib/auth.php";
 
 
-
-
-
 $first_name = filter_input(INPUT_POST, "first_name");
 $last_name = filter_input(INPUT_POST, "last_name");
 
@@ -40,14 +37,11 @@ if(!$first_name || !$last_name || !$start_time || !$end_time || !$date){
 $db = connect_db();
 $user_id = get_user_id($db);
 
+
 if(!$user_id){
-    header("Location: /login/");
-    exit;
+    send(401,["msg"=>"not logged in"]);
 }
 
-//    die("Please login/register to access this page");
-
-// Slight problem with identifying users for putting into insert
 
 $query = $db->prepare("    
     SELECT representatives.user_id 
@@ -62,8 +56,6 @@ $representative_id = $query->fetchColumn();
 $start = $date . ' ' . $start_time; 
 $end = $date . ' ' . $end_time; 
 
-
-// 1 added for testing purposes need to fix
 
 
 $query = $db->prepare("INSERT INTO `meetings` (`representative`, `client`, `start_time`, `end_time`) VALUES (?,?,?,?)");

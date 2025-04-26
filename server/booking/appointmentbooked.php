@@ -2,7 +2,7 @@
 
 // Name:    Ahyan Khan
 // Date:    2025-04-26
-//
+// 
 // Purpose:
 // To retrieve all the meetings that the client booked
 
@@ -16,6 +16,10 @@ $db = connect_db();
 $client_id = get_user_id($db);
 
 // if null redirect obviously to login
+
+if(!$client_id){
+    send(401,["msg"=>"not logged in"]);
+}
 
 
 
