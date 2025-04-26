@@ -14,14 +14,16 @@
 //      string chosen (representative)
 
 
-include "../lib/db.php";
-include "../lib/send.php";
-include "../lib/auth.php";
-
-
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+include "../lib/db.php";
+include "../lib/send.php";
+include "../lib/auth.php";
+include "./conflict_checker.php";
+
+
 
 
 // Retrieving all the avaliable dates within time period
@@ -52,6 +54,7 @@ if(!$representative_id){
     exit;
 }
 
+
 $id_value = $representative_id['id'];
 
 $new_date = new DateTime($date);
@@ -60,29 +63,24 @@ $dayOfWeek = $new_date->format('w');
 $query = $db->prepare("
 SELECT availability.start_time, availability.end_time,users.first_name, users.last_name
 FROM availability INNER JOIN representatives ON representatives.user_id = availability.representative
-INNER JOIN users ON users.id = representatives.user_id WHERE availability.day_of_week = ? AND representatives.id = ? 
-AND NOT EXISTS (
-    SELECT id
-    FROM meetings 
-    WHERE representative = representatives.id
-    AND day_of_week = availability.day_of_week 
-    AND TIME(start_time) = availability.start_time
-    AND TIME(end_time) = availability.end_time
-)");
+INNER JOIN users ON users.id = representatives.user_id WHERE availability.day_of_week = ? AND representatives.id = ?");
 
 $query->execute([$dayOfWeek, $id_value]);
 
 $all = [];
 
 while($test = $query->fetch()){
-    $thing = [
-        "full_name" => $chosen,
-        "start_time" => $test["start_time"],
-        "end_time" => $test["end_time"]
-    ];
+    if(availability_booked($dayOfWeek,$date,$test["start_time"],$test["end_time"],$id_value)){
+        die("went through");
+        $thing = [
+            "full_name" => $chosen,
+            "start_time" => $test["start_time"],
+            "end_time" => $test["end_time"]
+        ];
+        array_push($all, $thing);
+    }
 
-    array_push($all, $thing);
-
+    
 }
 
 send(200, $all); 

@@ -10,18 +10,16 @@
 include "../lib/db.php";
 include "../lib/send.php";
 include "../lib/auth.php";
+include "/conflict_checker.php";
 
 
 $db = connect_db();
 $client_id = get_user_id($db);
 
-// if null redirect obviously to login
 
 if(!$client_id){
     send(401,["msg"=>"not logged in"]);
 }
-
-
 
 
 $query = $db->prepare("
@@ -35,6 +33,7 @@ $query->execute([$client_id]);
 $all = [];
 
 while($meeting = $query->fetch()){
+
     $details = [
         "full_name" => $meeting['full_name'],
         "start_time" => $meeting["start_time"],
@@ -48,5 +47,4 @@ while($meeting = $query->fetch()){
 send(200, $all);
 
 ?>
-
 

@@ -100,7 +100,6 @@ export default function Booking() {
           
         }
 
-        if (!res.ok) console.error(await res.json());
             
     }
 
@@ -126,7 +125,6 @@ export default function Booking() {
           const data = await res.json(); 
           setData(data);
         }
-        if (!res.ok) console.error(await res.json());
       };
 
         /**
@@ -162,7 +160,6 @@ export default function Booking() {
             console.log("Properly sent.. yayy!");
           }
 
-          if (!res.ok) console.error(await res.json());
 
       }
 
