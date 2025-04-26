@@ -2,11 +2,12 @@ import { createPostParameters, basePrefix } from 'net_utils';
 import React, {useEffect,useContext, useState} from 'react';
 import { createRef } from "react";
 import Layout from "components/layout";
-import styles from '../css/Style.module.css';
 import { useRouter } from "next/router";
 import { AccountInfoContext } from "context";
-
-
+import styles from './booking.module.scss'
+import HLayout from 'components/h_layout';
+import RoundContainer from 'components/round_container';
+import VLayout from 'components/v_layout';
 
 export default function Booking() {
     const chosen = createRef<HTMLSelectElement>();    
@@ -111,7 +112,6 @@ export default function Booking() {
 
     const checkAvailability = async (e: any) => {
         e.preventDefault();
-      
         const res = await fetch(basePrefix('/api/booking/date.php'), {
           method: "POST",
           headers: {
@@ -122,15 +122,11 @@ export default function Booking() {
             date: date.current?.value
           }).toString()
         });
-        
-      
         if (res.ok) {
           const data = await res.json(); 
           setData(data);
         }
-
         if (!res.ok) console.error(await res.json());
-
       };
 
         /**
@@ -185,78 +181,75 @@ export default function Booking() {
             end_time: person["end_time"]
         });
     }
-      
+
   return (
     <Layout>
-        <div className={styles.main}>
-            <div className={styles.form_design}>
-                <h1>Booking Date:</h1>
-                <form className={styles.test} onSubmitCapture={checkAvailability}>
-                    <label htmlFor="company">Company:</label>
-                    <select className={styles.check} ref={company_chosen} onChange={representativeInfo}>
-                            <option value="" disabled selected>Select a company</option>
-                            {companyData.map((company, index) => (
-                                    <option key={index} value={company.name}>
-                                        {company.name}
-                                    </option>
-                                ))}
-                        </select>
-
-                    <label htmlFor="company">Name:</label>
-                    <select className={styles.check} ref={chosen} disabled>
-
-                        <option value="" disabled selected>Select a name</option>
-                        {nameData.map((person, index) => (
-                                <option key={index} value={person.name}>
-                                    {person.name}
-                                </option>
-                            ))}
-                    </select>
-
-                    <label htmlFor="booking-date">Date:</label>
-                    <input type="date" className={styles.check} ref={date} name="booking-date"></input>
-                    <button className={styles.submit_button} type="submit" id="submit">Check avaliability</button>
-
-
-                </form>
+        <HLayout>
+            <VLayout>
+                <RoundContainer>
+                    <VLayout>
+                        <h1>Booking Date:</h1>
+                        <form className={styles.form} onSubmitCapture={checkAvailability}>
+                            <div className={styles.field}>
+                                <label htmlFor="company">Company:</label>
+                                <select ref={company_chosen} onChange={representativeInfo}>
+                                        <option value="" disabled selected>Select a company</option>
+                                        {companyData.map((company, index) => (
+                                                <option key={index} value={company.name}>
+                                                    {company.name}
+                                                </option>
+                                            ))}
+                                </select>
+                            </div>
+                            <div className={styles.field}>
+                                <label htmlFor="company">Name:</label>
+                                <select ref={chosen} disabled onInput={checkAvailability}>
+                                    <option value="" disabled selected>Select a name</option>
+                                    {nameData.map((person, index) => (
+                                            <option key={index} value={person.name}>
+                                                {person.name}
+                                            </option>
+                                        ))}
+                                </select>
+                            </div>
+                            <div className={styles.field}>
+                                <label htmlFor="booking-date">Date:</label>
+                                <input type="date" ref={date} name="booking-date" onInput={checkAvailability}></input>
+                            </div>
+                        </form>
+                    </VLayout>
+                </RoundContainer>
 
                 {selectedperson && (
-                        <div className={styles.appointment_section}>
+                    <RoundContainer>
+                        <VLayout>
                             <h1>Booking Details:</h1>
-                            <p className={styles.details}>Name: {selectedperson["full_name"]}</p>
-                            <p className={styles.details}>Date: {selectedperson["date"]}</p>
-                            <p className={styles.details}>Time: {selectedperson["start_time"]}-{selectedperson["end_time"]}</p>
-                            <button className={styles.submit_button} onClick={bookingHandler}>Book meeting!</button>
-                        </div>
+                            <div className={styles.field}><p>Name:</p><p>{selectedperson["full_name"]}</p></div>
+                            <div className={styles.field}><p>Date:</p><p>{selectedperson["date"]}</p></div>
+                            <div className={styles.field}><p>Time:</p><p>{selectedperson["start_time"]}-{selectedperson["end_time"]}</p></div>
+                            <button className={styles.button} onClick={bookingHandler}>Book meeting!</button>
+                        </VLayout>
+                    </RoundContainer>
                 )}
+            </VLayout>
 
-            </div>
-
-            <div className={styles.tableside}>
-                <div className={styles.innertable}>
+            <RoundContainer>
+                <VLayout>
                     {data.length > 0 ?
                         (data.map((person, index) => (
-                            <div className={styles.eachone} key={index} onClick={() => meetingHandler(person)}>
-                                <div className={styles.header}>
+                            <div className={styles.personSelect} key={index} onClick={() => meetingHandler(person)}>
+                                <RoundContainer>
                                     <h1>{person.full_name}</h1>
-                                </div>
-
-                                <div className={styles.body}>
-                                    <p>Time: {person.start_time}-{person.end_time}</p>
-                                </div>
+                                    <div className={styles.field}><p>Time:</p><p>{person.start_time}-{person.end_time}</p></div>
+                                </RoundContainer>
                             </div>
                         ))
                         ): <p>Please select a date and company that has an avaliable time slot</p>
                     }
 
-        
-
-
-
-                </div>
-
-            </div>        
-        </div>
+                </VLayout>
+            </RoundContainer>
+        </HLayout>
     </Layout>
   )
 }
