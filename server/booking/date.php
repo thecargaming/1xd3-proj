@@ -51,8 +51,8 @@ AND NOT EXISTS (
     FROM meetings 
     WHERE representative = representatives.id
     AND day_of_week = availability.day_of_week 
-    AND start_time = TIME(availability.start_time)
-    AND end_time = TIME(availability.end_time)
+    AND TIME(start_time) = availability.start_time
+    AND TIME(end_time) = availability.end_time
 )");
 
 $query->execute([$dayOfWeek, $id_value]);
