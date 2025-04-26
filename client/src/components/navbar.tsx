@@ -21,11 +21,6 @@ function AccountInfo() {
     );
 }
 
-function OtherPages(){
-    return (
-        <Link href="/about">About us</Link>
-    )
-}
 
 export default function NavBar() {
     return (
