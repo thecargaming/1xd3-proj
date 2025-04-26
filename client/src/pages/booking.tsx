@@ -186,7 +186,6 @@ export default function Booking() {
             </div>
 
             <div className={styles.tableside}>
-
                 <div className={styles.innertable}>
                     <div className={styles.eachone}>
                             <div className={styles.header}>

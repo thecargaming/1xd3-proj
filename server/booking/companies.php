@@ -6,6 +6,20 @@ include "../lib/auth.php";
 
 $db = connect_db();
 
+$user_id = get_user_id($db);
+
+/*
+
+Temporary comment but needed to prevent access to page
+    if(!$user_id){
+        die("Please login/register to access this page");
+        or (need to figure out best case for access)
+        window.location.href = '/register';
+    }
+
+
+
+*/
 
 $query = $db->prepare("
     SELECT name FROM companies

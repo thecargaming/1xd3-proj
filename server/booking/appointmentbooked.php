@@ -8,23 +8,21 @@ include "../lib/auth.php";
 
 $db = connect_db();
 $client_id = get_user_id($db);
-$query = $db->prepare("SELECT `user_id` FROM `sessions` WHERE `session_id` = ?");
+
+
+
+$query = $db->prepare("
+SELECT meetings.start_time, meetings.end_time, CONCAT(users.first_name,' ', users.last_name) AS full_name
+FROM meetings JOIN representatives ON meetings.representative = representatives.id 
+JOIN users ON representatives.user_id = users.id WHERE meetings.id = ?;
+");
+
 $query->execute([$client_id]);
 
-$thing = $query->fetch();
-$actual_id = $thing['user_id'];
-
-
-// need inner join to properly work
-$query = $db->prepare("SELECT `representative`,`client`, `start_time`, `end_time` FROM `meetings` WHERE `id` = ?");
-$query->execute([$actual_id]);
-
-$all = [];
 
 while($meeting = $query->fetch()){
     $details = [
-        // fix
-        "representative_name" => $meeting['representative_name'],
+        "full_name" => $meeting['full_name'],
         "start_time" => $meeting["start_time"],
         "end_time" => $meeting["end_time"]
     ];

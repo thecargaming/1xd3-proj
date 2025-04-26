@@ -10,6 +10,20 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+$user_id = get_user_id($db);
+
+/*
+
+Temporary comment but needed to prevent access to page
+    if(!$user_id){
+        die("Please login/register to access this page");
+    }
+
+
+
+*/
+
+
 
 // i need to look for company too to match
 
@@ -27,7 +41,6 @@ $date = filter_input(INPUT_POST, "date");
 $db = connect_db();
 
 // Slight problem with identifying users for putting into insert
-$user_id = get_user_id($db);
 
 $query = $db->prepare("    
     SELECT representatives.user_id 
