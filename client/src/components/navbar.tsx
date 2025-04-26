@@ -8,14 +8,19 @@ function AccountInfo() {
     const [accountInfo, _] = useContext(AccountInfoContext);
     if (accountInfo === null) return (
         <>
-        <Link href="/login">Login</Link>
+        <button><Link href="/register">Register</Link></button>
+        <button><Link href="/login">Login</Link></button>
+
         </>
     ); else return (
         <>
-        <Link href="/account">{accountInfo.firstName} {accountInfo.lastName}</Link>
+            <Link href="/booking.html"><button>Booking</button></Link>
+            <Link href="/appointmentbooked.html"><button>Booked Appointments</button></Link>
+            <Link href="/account">{`${accountInfo.firstName} ${accountInfo.lastName}`}</Link>
         </>
     );
 }
+
 
 export default function NavBar() {
     return (
