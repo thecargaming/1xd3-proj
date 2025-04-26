@@ -10,7 +10,6 @@
 include "../lib/db.php";
 include "../lib/send.php";
 include "../lib/auth.php";
-include "/conflict_checker.php";
 
 
 $db = connect_db();
@@ -25,7 +24,7 @@ if(!$client_id){
 $query = $db->prepare("
 SELECT meetings.start_time, meetings.end_time, CONCAT(users.first_name,' ', users.last_name) AS full_name
 FROM meetings JOIN representatives ON meetings.representative = representatives.id 
-JOIN users ON representatives.user_id = users.id WHERE meetings.id = ?;
+JOIN users ON representatives.user_id = users.id WHERE meetings.client = ?;
 ");
 
 $query->execute([$client_id]);

@@ -21,7 +21,6 @@ error_reporting(E_ALL);
 include "../lib/db.php";
 include "../lib/send.php";
 include "../lib/auth.php";
-include "./conflict_checker.php";
 
 
 

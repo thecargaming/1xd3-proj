@@ -201,7 +201,7 @@ export default function Booking() {
                             </div>
                             <div className={styles.field}>
                                 <label htmlFor="company">Name:</label>
-                                <select ref={chosen} disabled onInput={checkAvailability}>
+                                <select ref={chosen} disabled>
                                     <option value="" disabled selected>Select a name</option>
                                     {nameData.map((person, index) => (
                                             <option key={index} value={person.id}>

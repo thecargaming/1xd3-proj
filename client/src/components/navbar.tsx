@@ -14,8 +14,8 @@ function AccountInfo() {
         </>
     ); else return (
         <>
-            <Link href="/booking"><button>Booking</button></Link>
-            <Link href="/appointmentbooked"><button>Booked Appointments</button></Link>
+            <Link href="/booking.html"><button>Booking</button></Link>
+            <Link href="/appointmentbooked.html"><button>Booked Appointments</button></Link>
             <Link href="/account">{`${accountInfo.firstName} ${accountInfo.lastName}`}</Link>
         </>
     );

@@ -4,6 +4,10 @@ import Layout from "components/layout";
 import styles from '../css/Style.module.css';
 import { useRouter } from "next/router";
 import { AccountInfoContext } from "context";
+import HLayout from 'components/h_layout';
+import RoundContainer from 'components/round_container';
+import VLayout from 'components/v_layout';
+
 
 
 export default function AppointmentLookup(){
@@ -44,24 +48,35 @@ export default function AppointmentLookup(){
         
 
     return (
+
+
+     
+
+
         <Layout>
             <h1>Appointments</h1>
 
-            {data.length > 0 ? (
-                data.map((person, index) => (
-                    <div className={styles.eachone} key={index}>
-                        <div className={styles.header}>
-                            <h1>{person.full_name}</h1>
-                        </div>
+            <VLayout>
+                    {data.length > 0 ? (
+                            data.map((person, index) => (
+                                <div className={styles.eachone} key={index}>
+                                    <RoundContainer>
+                                    <div className={styles.header}>
+                                        <h1>{person.full_name}</h1>
+                                        
+                                    </div>
 
-                        <div className={styles.body}>
-                            <p>Date: {person.date}</p>
-                            <p>Time: {person.start_time} - {person.end_time}</p>
-                        </div>
+                                    <div className={styles.body}>
+                                        <p>Date: {person.date}</p>
+                                        <p>Time: {person.start_time} - {person.end_time}</p>
+                                    </div>
+                                    </RoundContainer>
 
-                    </div>
-                ))
-                ) : ( <p>No appointments found</p> )}
+                                </div>
+                            ))
+                            ) : ( <p>No appointments found</p> )}
+            </VLayout>
+
 
 
         </Layout>
