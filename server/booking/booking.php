@@ -60,8 +60,11 @@ $end = $date . ' ' . $end_time;
 
 
 $query = $db->prepare("INSERT INTO `meetings` (`representative`, `client`, `start_time`, `end_time`) VALUES (?,?,?,?)");
-$query->execute([$representative_id, $user_id ,$start, $end]);
+$test = $query->execute([$representative_id, $user_id ,$start, $end]);
 
-
-send(200, ["msg"=>"success"]);
+if($test){
+    send(200, ["msg"=>"success"]);
+} else {
+    send(401, ["msg" => "Error occured can not book meeting"]);
+}
 ?>

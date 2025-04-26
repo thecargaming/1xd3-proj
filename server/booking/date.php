@@ -45,7 +45,15 @@ $dayOfWeek = $new_date->format('w');
 $query = $db->prepare("
 SELECT availability.start_time, availability.end_time,users.first_name, users.last_name
 FROM availability INNER JOIN representatives ON representatives.user_id = availability.representative
-INNER JOIN users ON users.id = representatives.user_id WHERE availability.day_of_week = ? AND representatives.id = ?");
+INNER JOIN users ON users.id = representatives.user_id WHERE availability.day_of_week = ? AND representatives.id = ? 
+AND NOT EXISTS (
+    SELECT id
+    FROM meetings 
+    WHERE representative = representatives.id
+    AND day_of_week = availability.day_of_week 
+    AND start_time = TIME(availability.start_time)
+    AND end_time = TIME(availability.end_time)
+)");
 
 $query->execute([$dayOfWeek, $id_value]);
 
@@ -62,5 +70,5 @@ while($test = $query->fetch()){
 
 }
 
-send(200, $all); // need to check if send function doing json
+send(200, $all); 
 ?>

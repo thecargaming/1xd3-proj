@@ -1,7 +1,7 @@
 import { createPostParameters, basePrefix } from 'net_utils';
 import React, {useEffect,useState} from 'react';
 import Layout from "components/layout";
-import styles from './Style.module.css'
+import styles from '../css/Style.module.css'
 
 
 export default function AppointmentLookup(){
@@ -24,8 +24,6 @@ export default function AppointmentLookup(){
             }, []);
         
 
-    // temp keep email for onsubmit cap
-    // apply .length to rest
     return (
         <Layout>
             <h1>Appointments</h1>

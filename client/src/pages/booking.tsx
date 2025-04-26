@@ -2,7 +2,7 @@ import { createPostParameters, basePrefix } from 'net_utils';
 import React, {useEffect, useState} from 'react';
 import { createRef } from "react";
 import Layout from "components/layout";
-import styles from './Style.module.css'
+import styles from '../css/Style.module.css'
 
 export default function Booking() {
     const chosen = createRef<HTMLSelectElement>();    
@@ -145,6 +145,7 @@ export default function Booking() {
     <Layout>
         <div className={styles.main}>
             <div className={styles.form_design}>
+                <h1>Booking Date:</h1>
                 <form className={styles.test} onSubmitCapture={checkAvailability}>
                     <label htmlFor="company">Company:</label>
                     <select className={styles.check} ref={company_chosen} onChange={representativeInfo}>
@@ -157,7 +158,7 @@ export default function Booking() {
                         </select>
 
                     <label htmlFor="company">Name:</label>
-                    <select ref={chosen} disabled>
+                    <select className={styles.check} ref={chosen} disabled>
 
                         <option value="" disabled selected>Select a name</option>
                         {nameData.map((person, index) => (
@@ -168,18 +169,19 @@ export default function Booking() {
                     </select>
 
                     <label htmlFor="booking-date">Date:</label>
-                    <input type="date" ref={date} name="booking-date"></input>
-                    <button type="submit" id="submit">Submit</button>
+                    <input type="date" className={styles.check} ref={date} name="booking-date"></input>
+                    <button className={styles.submit_button} type="submit" id="submit">Check avaliability</button>
 
 
                 </form>
 
                 {selectedperson && (
-                        <div>
-                        <p>Name: {selectedperson["full_name"]}</p>
-                        <p>Date:{selectedperson["date"]}</p>
-                        <p>Time: {selectedperson["start_time"]}-{selectedperson["end_time"]}</p>
-                        <button onClick={bookingHandler}>Book meeting!</button>
+                        <div className={styles.appointment_section}>
+                            <h1>Booking Details:</h1>
+                            <p className={styles.details}>Name: {selectedperson["full_name"]}</p>
+                            <p className={styles.details}>Date: {selectedperson["date"]}</p>
+                            <p className={styles.details}>Time: {selectedperson["start_time"]}-{selectedperson["end_time"]}</p>
+                            <button className={styles.submit_button} onClick={bookingHandler}>Book meeting!</button>
                         </div>
                 )}
 
@@ -187,39 +189,23 @@ export default function Booking() {
 
             <div className={styles.tableside}>
                 <div className={styles.innertable}>
-                    <div className={styles.eachone}>
-                            <div className={styles.header}>
-                                <h1>PUT NAME HERE</h1>
+                    {data.length > 0 ?
+                        (data.map((person, index) => (
+                            <div className={styles.eachone} key={index} onClick={() => meetingHandler(person)}>
+                                <div className={styles.header}>
+                                    <h1>{person.full_name}</h1>
+                                </div>
+
+                                <div className={styles.body}>
+                                    <p>Time: {person.start_time}-{person.end_time}</p>
+                                </div>
                             </div>
+                        ))
+                        ): <p>Please select a date and company that has an avaliable time slot</p>
+                    }
 
-                            <div className={styles.body}>
-                                <p>Time: START_TIME-END_TIME</p>
-                                <p>Location: Keep blank for now</p>
-
-                            </div>
-                    </div>
-
-                    {data.map((person, index) => (
-                        <div className={styles.eachone} key={index} onClick={() => meetingHandler(person)}>
-                            <div className={styles.header}>
-                                <h1>{person.full_name}</h1>
-                            </div>
-
-                            <div className={styles.body}>
-                                <p>Time: {person.start_time}-{person.end_time}</p>
-                                <p>Location: Keeping blank for now</p>
-
-                            </div>
-                        </div>
-                    ))}
         
 
-
-
-
-            
-
-  
 
 
                 </div>
