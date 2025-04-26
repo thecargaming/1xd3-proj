@@ -6,11 +6,11 @@ import { useRouter } from "next/router";
 import { AccountInfoContext } from "context";
 
 
-
 export default function AppointmentLookup(){
 
         type DataInfo = {
             full_name: string;
+            date: string;
             start_time: string;
             end_time: string;
         };
@@ -55,6 +55,7 @@ export default function AppointmentLookup(){
                         </div>
 
                         <div className={styles.body}>
+                            <p>Date: {person.date}</p>
                             <p>Time: {person.start_time} - {person.end_time}</p>
                         </div>
 

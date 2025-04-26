@@ -33,16 +33,21 @@ $query->execute([$client_id]);
 $all = [];
 
 while($meeting = $query->fetch()){
+    $start_time_split = explode(' ', $meeting['start_time']);
+    $end_time_split = explode(' ', $meeting['end_time']);
+
 
     $details = [
         "full_name" => $meeting['full_name'],
-        "start_time" => $meeting["start_time"],
-        "end_time" => $meeting["end_time"]
+        "date" => $start_time_split[0],
+        "start_time" => $start_time_split[1],
+        "end_time" => $end_time_split[1]
     ];
 
     array_push($all, $details);
 
 }
+
 
 send(200, $all);
 
