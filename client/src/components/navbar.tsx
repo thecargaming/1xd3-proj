@@ -2,22 +2,22 @@ import { AccountInfoContext } from 'context';
 import styles from './navbar.module.scss';
 import Link from 'next/link';
 import { useContext } from 'react';
-import { BiHome } from 'react-icons/bi';
+import { BiHome, BiLogIn, BiMessage, BiTime, BiUser } from 'react-icons/bi';
 
 function AccountInfo() {
     const [accountInfo, _] = useContext(AccountInfoContext);
     if (accountInfo === null) return (
-        <>
-        <button><Link href="/register">Register</Link></button>
-        <button><Link href="/login">Login</Link></button>
-        <button><Link href="/aboutus">About us</Link></button>
-        </>
+        <div className={styles.links}>
+        <Link href="/register"><button className={styles.accountButton}><span>Register</span><BiUser /></button></Link>
+        <Link href="/login"><button className={styles.accountButton}><span>Login</span><BiLogIn /></button></Link>
+        <Link href="/aboutus"><button><span>About us</span><BiMessage/></button></Link>
+        </div>
     ); else return (
-        <>
-            <Link href="/booking.html"><button>Booking</button></Link>
-            <Link href="/appointmentbooked.html"><button>Booked Appointments</button></Link>
-            <Link href="/account">{`${accountInfo.firstName} ${accountInfo.lastName}`}</Link>
-        </>
+        <div className={styles.links}>
+            <Link href="/booking.html"><button className={styles.accountButton}><span>Booking</span><BiMessage /></button></Link>
+            <Link href="/appointmentbooked.html"><button className={styles.accountButton}><span>Booked Appointments</span><BiTime /></button></Link>
+            <Link href="/account"><button className={styles.accountButton}><span>{`${accountInfo.firstName} ${accountInfo.lastName}`}</span><BiUser /></button></Link>
+        </div>
     );
 }
 

@@ -31,3 +31,43 @@
       height: 100%;
     }
 }
+
+.links {
+    height: 100%;
+    border: none;
+    display: flex;
+    flex-direction: row;
+    * {
+        border: none;
+        height: 100%;
+        background-color: map-get($theme, "nav-bg");
+    }
+    a button {
+        padding: 4px 8px 4px 8px;
+        display: flex;
+        flex-direction: row;
+        gap: 0.25rem;
+        span {
+            text-align: center;
+            height: 100%;
+        }
+        &:hover {
+          * {
+              background-color: map-get($theme, "bg-3");
+              transition: ease-out 0.2s;
+          }
+          background-color: map-get($theme, "bg-3");
+          transition: ease-out 0.2s;
+        }
+    }
+    text-decoration: none;
+    * {
+        text-decoration: none;
+    }
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+
+}
