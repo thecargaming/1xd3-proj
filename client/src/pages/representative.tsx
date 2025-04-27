@@ -22,12 +22,20 @@ type Availability = {
     id: number,
 };
 
+type Meeting = {
+    name: string,
+    start: Date,
+    end: Date,
+};
+
 export default function Representative() {
     const [accountInfo, updateAccountInfo] = useContext(AccountInfoContext);
     const router = useRouter();
     const [companies, setCompanies] = useState<Company[]>([]);
     const [availability, setAvailability] = useState<Availability[]>([]);
     const selectedCompanyElement = createRef<HTMLSelectElement>();
+    const [selectedCompany, setSelectedCompany] = useState(null as Company | null);
+    const [meetings, setMeetings] = useState<Meeting[]>([]);
 
     const DAYS_OF_WEEK = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const updateAvailability = async () => {
@@ -120,7 +128,16 @@ export default function Representative() {
 
     })()}, [accountInfo])
 
-    const [selectedCompany, setSelectedCompany] = useState(null as Company | null);
+    useEffect(()=>{(async()=>{
+        let res = await fetch(basePrefix(`/api/representative/get_meetings.php?representative_id=${selectedCompany?.representative_id}`));
+        if (!res.ok) {console.error(await res.json()); return}
+        let meetings_raw = await res.json();
+        setMeetings(meetings_raw.map((raw: any) => ({
+            name: raw.name,
+            start: new Date(raw.start),
+            end: new Date(raw.end),
+        })))
+    })()}, [selectedCompany])
 
     return (
         <Layout>
@@ -194,6 +211,12 @@ export default function Representative() {
                             name: a.company_name,
                             description: `Meeting id: ${a.id}`
                         }))} />
+                        {meetings.map(m => (
+                            <RoundContainer>
+                                <h1>{m.name}</h1>
+                                <p>{m.start.toLocaleDateString()} {m.start.toLocaleTimeString()}-{m.end.toLocaleTimeString()}</p>
+                            </RoundContainer>
+                        ))}
                     </VLayout>
                 ) : <></>}
             </VLayout>
