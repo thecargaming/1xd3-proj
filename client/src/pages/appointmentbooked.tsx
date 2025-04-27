@@ -9,6 +9,14 @@ import RoundContainer from 'components/round_container';
 import VLayout from 'components/v_layout';
 
 
+// Name:    Ahyan Khan
+// Student Number: 400591095
+// Date:    2025-04-26
+//
+// Purpose:
+//      For users to see the appointments that they booked and to see what time and who they booked it with
+
+
 
 export default function AppointmentLookup(){
 

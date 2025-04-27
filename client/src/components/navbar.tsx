@@ -10,7 +10,7 @@ function AccountInfo() {
         <>
         <button><Link href="/register">Register</Link></button>
         <button><Link href="/login">Login</Link></button>
-
+        <button><Link href="/aboutus">About us</Link></button>
         </>
     ); else return (
         <>

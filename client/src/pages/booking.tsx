@@ -8,6 +8,16 @@ import styles from './booking.module.scss'
 import HLayout from 'components/h_layout';
 import RoundContainer from 'components/round_container';
 import VLayout from 'components/v_layout';
+import Link from "next/link";
+
+// Name:    Ahyan Khan
+// Student Number: 400591095
+// Date:    2025-04-26
+//
+// Purpose:
+//      Booking page where users can book a meeting
+
+
 
 export default function Booking() {
     const chosen = createRef<HTMLSelectElement>();    
@@ -135,6 +145,8 @@ export default function Booking() {
         * that submits all the information
         *
         */
+        
+      const [booked, setbooked] = useState(false);
 
       const bookingHandler = async (e: any) => {
         e.preventDefault();
@@ -157,8 +169,10 @@ export default function Booking() {
           });
 
           if (res.ok){
-            console.log("Properly sent.. yayy!");
+            setbooked(true);
           }
+
+
 
 
       }
@@ -179,6 +193,30 @@ export default function Booking() {
             end_time: person["end_time"]
         });
     }
+
+    if (booked) {
+        return (
+          <Layout>
+            <HLayout>
+              <VLayout>
+                <RoundContainer>
+                    <div className={styles.middlehope}>
+                        <h1 className={styles.text}>🎉 Appointment Booking Success 🎉</h1>
+                        <p className={styles.text}>Congratulations, you have booked a meeting. The hard part is over (probably)</p>
+                        <HLayout>
+                            <button className={styles.button} onClick={() => router.push("/appointmentbooked")}>Your Appointments</button>
+                            <button className={styles.button} onClick={() => router.push("/")}>Home</button>
+                        </HLayout>
+                    </div>
+                </RoundContainer>
+                <div>
+                </div>
+              </VLayout>
+            </HLayout>
+          </Layout>
+        );
+      }
+    
 
   return (
     <Layout>
@@ -232,20 +270,22 @@ export default function Booking() {
             </VLayout>
 
             <RoundContainer>
-                <VLayout>
-                    {data.length > 0 ?
-                        (data.map((person, index) => (
-                            <div className={styles.personSelect} key={index} onClick={() => meetingHandler(person)}>
-                                <RoundContainer>
-                                    <h1>{person.full_name}</h1>
-                                    <div className={styles.field}><p>Time:</p><p>{person.start_time}-{person.end_time}</p></div>
-                                </RoundContainer>
-                            </div>
-                        ))
-                        ): <p>Please select a date and company that has an avaliable time slot</p>
-                    }
+                <div className={styles.container}>
+                    <VLayout>
+                        {data.length > 0 ?
+                            (data.map((person, index) => (
+                                <div className={styles.personSelect} key={index} onClick={() => meetingHandler(person)}>
+                                    <RoundContainer>
+                                        <h1>{person.full_name}</h1>
+                                        <div className={styles.field}><p>Time:</p><p>{person.start_time}-{person.end_time}</p></div>
+                                    </RoundContainer>
+                                </div>
+                            ))
+                            ): <p>Please select a date and company that has an avaliable time slot</p>
+                        }
 
-                </VLayout>
+                    </VLayout>
+                </div>
             </RoundContainer>
         </HLayout>
     </Layout>
