@@ -5,6 +5,7 @@ import RoundContainer from 'components/round_container';
 import VLayout from 'components/v_layout';
 import styles from './index.module.scss'
 import Image from 'next/image';
+import { basePrefix } from "net_utils";
 
 // Name:    Ahyan Khan
 // Student Number: 400591095
@@ -22,7 +23,7 @@ export default function Index() {
         <Layout>
             <VLayout>
                 <div className={styles.banner}>
-                            <h1 className={styles.title}>Banner Image</h1>
+                    <img src={basePrefix("/images/banner.jpg")} />
                         </div>
 
                 <p className={styles.title}>Welcome to the Appointment Booking Website</p>
@@ -52,7 +53,7 @@ export default function Index() {
 
                         <RoundContainer>
                                 <p>Our CEO:</p>
-                                <Image src="/images/ceo.jpeg" alt="CEO IMAGE" width={200} height={200}/>
+                                <img src={basePrefix("/images/ceo.jpg")} alt="CEO IMAGE" width={200} height={200}/>
                                 <p>What our CEO believes in:</p>
                                 <p>"To be everything is it to be nothing at all"</p>
                         </RoundContainer>
