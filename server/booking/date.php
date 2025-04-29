@@ -47,7 +47,7 @@ $dayOfWeek = $new_date->format('w');
 
 $query = $db->prepare("
 SELECT availability.start_time,availability.end_time,CONCAT(users.first_name, ' ', users.last_name) as name FROM availability
-INNER JOIN representatives ON representatives.user_id = availability.representative
+INNER JOIN representatives ON representatives.id = availability.representative
 INNER JOIN users ON users.id = representatives.user_id
 WHERE availability.day_of_week = ?
 AND representatives.id = ?
