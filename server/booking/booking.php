@@ -47,14 +47,14 @@ SELECT COUNT(*) > 0 FROM representatives
 INNER JOIN users on users.id=representatives.user_id
 INNER JOIN availability ON availability.representative=representatives.id
 WHERE availability.day_of_week = ?
-AND CONVERT(CONVERT(?, TIME), INT) >= CONVERT(availability.start_time, INT)
-AND CONVERT(CONVERT(?, TIME), INT) <= CONVERT(availability.end_time, INT)
+AND CONVERT(?, TIME) >= availability.start_time
+AND CONVERT(?, TIME) <= availability.end_time
 AND (
     SELECT COUNT(*) FROM meetings
     INNER JOIN representatives AS rep ON meetings.representative=rep.id
     WHERE (meetings.client=users.id OR rep.user_id=users.id)
-    AND CONVERT(CONVERT(?, DATETIME), INT) < CONVERT(meetings.end_time, INT)
-    AND CONVERT(CONVERT(?, DATETIME), INT) > CONVERT(meetings.start_time, INT)
+    AND CONVERT(?, DATETIME) < meetings.end_time
+    AND CONVERT(?, DATETIME) > meetings.start_time
     ) = 0
 AND representatives.id = ?;
 ");

@@ -53,8 +53,8 @@ SELECT COUNT(*) FROM users
 INNER JOIN representatives ON representatives.user_id=users.id
 INNER JOIN availability ON representatives.id=availability.representative
 WHERE users.id=?
-AND CONVERT(CONVERT(?, TIME), INT) < CONVERT(availability.end_time, INT)
-AND CONVERT(CONVERT(?, TIME), INT) > CONVERT(availability.start_time, INT)
+AND CONVERT(?, TIME) < availability.end_time
+AND CONVERT(?, TIME) > availability.start_time
 AND availability.day_of_week=?;
 ");
 if (!$query->execute([$user_id, $start, $end, $day_of_week])) send(500, ["msg"=>"unknown"]);

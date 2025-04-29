@@ -55,8 +55,8 @@ AND (
     SELECT COUNT(*) FROM meetings
     INNER JOIN representatives AS rep ON meetings.representative=rep.id
     WHERE (meetings.client=users.id OR rep.user_id=users.id)
-    AND CONVERT(CONVERT(CONCAT(?, availability.start_time), DATETIME), INT) < CONVERT(meetings.end_time, INT)
-    AND CONVERT(CONVERT(CONCAT(?, availability.end_time), DATETIME), INT) > CONVERT(meetings.start_time, INT)
+    AND CONVERT(CONCAT(?, availability.start_time), DATETIME) < meetings.end_time
+    AND CONVERT(CONCAT(?, availability.end_time), DATETIME) > meetings.start_time
     ) = 0
     ");
 
